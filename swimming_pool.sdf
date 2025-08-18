@@ -59,6 +59,47 @@
         <zW>-10</zW>
         <zWabsW>-3</zWabsW>
       </plugin>
+
+      <link name="thruster">
+        <pose>-0.30 -0.20 -0.30   0 0 0</pose>
+        <inertial>
+          <mass>0.2</mass>
+          <inertia>
+            <ixx>1e-4</ixx>
+            <iyy>1e-4</iyy>
+            <izz>1e-4</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name="tube">
+          <geometry>
+            <cylinder>
+              <radius>0.03</radius>
+              <length>0.12</length>
+            </cylinder>
+          </geometry>
+        </visual>
+      </link>
+
+      <joint name="thruster_joint" type="revolute">
+        <parent>box_link</parent>
+        <child>thruster</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+        </axis>
+      </joint>
+
+      <plugin filename="ignition-gazebo-thruster-system" name="ignition::gazebo::systems::Thruster">
+        <topic>/thrust/right</topic>
+        <joint_name>thruster_joint</joint_name>
+        <fluid_density>1000</fluid_density>
+        <propeller_diameter>0.10</propeller_diameter>
+        <thrust_coefficient>0.0044</thrust_coefficient>
+        <velocity_control>false</velocity_control>
+      </plugin>
+
     </model>
 
   </world>
