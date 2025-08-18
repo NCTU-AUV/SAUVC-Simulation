@@ -1,6 +1,65 @@
 <?xml version="1.0" ?>
 <sdf version="1.8">
-    <world name="swimming_pool">
+  <world name="swimming_pool">
 
-    </world>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+
+    <plugin filename="gz-sim-buoyancy-system" name="gz::sim::systems::Buoyancy">
+      <graded_buoyancy>
+        <default_density>1000</default_density>
+        <density_change>
+          <above_depth>0</above_depth>
+          <density>1</density>
+        </density_change>
+      </graded_buoyancy>
+    </plugin>
+
+    <model name="buoyant_box">
+      <static>false</static>
+
+      <pose>0 0 -0.30 0 0 0</pose>
+
+      <link name="box_link">
+        <inertial>
+          <mass>100</mass>
+          <inertia>
+            <ixx>4.1666667</ixx>
+            <iyy>4.1666667</iyy>
+            <izz>4.1666667</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+        </inertial>
+
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.5 0.5 0.5</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+
+      <plugin filename="ignition-gazebo-hydrodynamics-system" name="ignition::gazebo::systems::Hydrodynamics">
+        <link_name>box_link</link_name>
+        <xU>-10</xU>
+        <xUabsU>-3</xUabsU>
+        <yV>-10</yV>
+        <yVabsV>-3</yVabsV>
+        <zW>-10</zW>
+        <zWabsW>-3</zWabsW>
+      </plugin>
+    </model>
+
+  </world>
 </sdf>
