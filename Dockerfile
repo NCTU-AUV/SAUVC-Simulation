@@ -1,4 +1,6 @@
-FROM ubuntu:22.04
+FROM ros:humble
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /etc/bash.bashrc
 
 RUN apt-get update
 RUN apt-get install lsb-release gnupg -y
