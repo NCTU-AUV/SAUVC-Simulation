@@ -1,2 +1,6 @@
 certs/
 .vscode/
+build/
+install/
+log/
+.DS_Store
