@@ -11,3 +11,5 @@
 ## Reference
 
 [How to use web visualization](https://gazebosim.org/docs/fortress/web_visualization/)
+
+[Simulating and Testing underwater robots in GazeboSim](https://app.theconstruct.ai/rosjects/946878/)
