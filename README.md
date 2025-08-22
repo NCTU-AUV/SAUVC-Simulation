@@ -8,6 +8,13 @@
 4. To another terminal run `make enter_container`, and run `ign gazebo -v 4 -s -r <world_file.sdf>`.
 5. To [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (at least I know Safari works).
 
+## How to Create a Model
+
+Following [Blender SDF Exporter](https://github.com/gazebosim/gz-sim/blob/ignition-gazebo6_6.17.0/tutorials/blender_sdf_exporter.md), 
+use Blender 2.82 to make the model and its texture and use 
+[sdf_exporter.py](https://github.com/gazebosim/gz-sim/blob/ign-gazebo5/examples/scripts/blender/sdf_exporter.py)
+to export the model to .sdf.
+
 ## Reference
 
 [How to use web visualization](https://gazebosim.org/docs/fortress/web_visualization/)
