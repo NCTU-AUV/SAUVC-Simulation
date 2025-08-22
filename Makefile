@@ -9,7 +9,7 @@ build_container:
 	@echo "Creating and starting a new container: $(CONTAINER_NAME)"
 	docker run -dit \
 		--name $(CONTAINER_NAME) \
-		-v $(PWD):/root/$(WORKSPACE) \
+		-v $(PWD)/$(WORKSPACE):/root/$(WORKSPACE) \
 		-p 9002:9002 \
 		-v $(PWD)/certs:/ign-certs:ro \
 		$(IMAGE_NAME):latest

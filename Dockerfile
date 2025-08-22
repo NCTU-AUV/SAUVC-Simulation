@@ -14,4 +14,4 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get install ignition-fortress -y
 
-WORKDIR /root/orca_auv_gazebo_simulation_ws
+WORKDIR /root/
