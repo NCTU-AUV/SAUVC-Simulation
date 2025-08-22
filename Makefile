@@ -24,6 +24,9 @@ enter_container:
 clean:
 	docker rm -f $(CONTAINER_NAME) || true
 	rm -rf certs
+	rm -rf orca_auv_gazebo_simulation_ws/build
+	rm -rf orca_auv_gazebo_simulation_ws/install
+	rm -rf orca_auv_gazebo_simulation_ws/log
 
 network_certification:
 	bash -c "mkdir certs \
