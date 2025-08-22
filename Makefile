@@ -14,6 +14,11 @@ build_container:
 		-v $(PWD)/certs:/ign-certs:ro \
 		$(IMAGE_NAME):latest
 
+	docker exec $(CONTAINER_NAME) /bin/bash -i -c \
+		"cd $(WORKSPACE) \
+		&& colcon build --symlink-install \
+		&& echo \"source $(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
+
 build_image:
 	docker build --pull -t $(IMAGE_NAME):latest .
 
