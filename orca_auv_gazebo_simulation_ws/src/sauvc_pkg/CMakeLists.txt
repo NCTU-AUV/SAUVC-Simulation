@@ -11,6 +11,21 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+# --- Install non-code assets ---
+install(DIRECTORY models/
+        DESTINATION share/${PROJECT_NAME}/models)
+
+install(DIRECTORY worlds/
+        DESTINATION share/${PROJECT_NAME}/worlds)
+
+# --- Environment hook to expose assets to Gazebo ---
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/${PROJECT_NAME}_resource_path.dsv.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_resource_path.dsv
+  @ONLY
+)
+ament_environment_hooks(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_resource_path.dsv)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
