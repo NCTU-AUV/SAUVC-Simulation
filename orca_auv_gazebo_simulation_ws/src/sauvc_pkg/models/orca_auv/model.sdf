@@ -17,7 +17,7 @@
 
       </collision>
 
-      <visual name="visual">
+      <visual name="main_hull_visual">
 
         <pose>0 0 0.115 0 1.5707963268 0</pose>
 
@@ -36,11 +36,7 @@
 
       </visual>
 
-    </link>
-
-    <link name="main_frame">
-
-      <visual name="visual">
+      <visual name="main_frame_visual">
 
         <pose>0 0 -0.070 0 0 0</pose>
 
