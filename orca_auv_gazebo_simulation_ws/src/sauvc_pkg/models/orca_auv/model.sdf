@@ -4,6 +4,19 @@
 
     <link name="main_hull">
 
+      <collision name="main_body_buoyancy">
+
+        <pose>0 0 0.115 0 1.5707963268 0</pose>
+
+        <geometry>
+          <cylinder>
+            <radius>0.115</radius>
+            <length>0.6</length>
+          </cylinder>
+        </geometry>
+
+      </collision>
+
       <visual name="visual">
 
         <pose>0 0 0.115 0 1.5707963268 0</pose>
