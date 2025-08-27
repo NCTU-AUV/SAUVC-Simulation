@@ -2,7 +2,7 @@
 <sdf version="1.8">
   <model name="orca_auv">
 
-    <link name="main_hull">
+    <link name="main_body">
 
       <inertial>
         <mass>23</mass>
@@ -70,7 +70,7 @@
     <plugin
       filename="ignition-gazebo-hydrodynamics-system"
       name="ignition::gazebo::systems::Hydrodynamics">
-      <link_name>main_hull</link_name>
+      <link_name>main_body</link_name>
 
       <xDotU>-1</xDotU>
       <yDotV>-1</yDotV>
