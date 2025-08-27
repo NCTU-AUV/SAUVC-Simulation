@@ -67,5 +67,35 @@
 
     </link>
 
+    <plugin
+      filename="ignition-gazebo-hydrodynamics-system"
+      name="ignition::gazebo::systems::Hydrodynamics">
+      <link_name>main_hull</link_name>
+
+      <xDotU>-1</xDotU>
+      <yDotV>-1</yDotV>
+      <zDotW>-1</zDotW>
+
+      <kDotP>-0.1</kDotP>
+      <mDotQ>-0.1</mDotQ>
+      <nDotR>-0.1</nDotR>
+
+      <xUabsU>-1</xUabsU>
+      <yVabsV>-1</yVabsV>
+      <zWabsW>-1</zWabsW>
+
+      <kPabsP>-1</kPabsP>
+      <mQabsQ>-1</mQabsQ>
+      <nRabsR>-1</nRabsR>
+
+      <xU>-30</xU>
+      <yV>-30</yV>
+      <zW>-30</zW>
+
+      <kP>-1</kP>
+      <mQ>-1</mQ>
+      <nR>-1</nR>
+    </plugin>
+
   </model>
 </sdf>
