@@ -97,7 +97,7 @@
       <nR>-1</nR>
     </plugin>
 
-    <link name="thruster0">
+    <link name="thruster_0">
 
       <pose relative_to="main_body">0.150 0.237 0 0 1.5707963268 0</pose>
 
@@ -113,7 +113,7 @@
         </inertia>
       </inertial>
 
-      <visual name="thruster_visual">
+      <visual name="thruster_0_visual">
         <pose>0 0 0 0 1.5707963268 0</pose>
 
         <geometry>
@@ -132,9 +132,9 @@
 
     </link>
 
-    <joint name="thruster0_joint" type="revolute">
+    <joint name="thruster_0_joint" type="revolute">
       <parent>main_body</parent>
-      <child>thruster0</child>
+      <child>thruster_0</child>
 
       <axis>
         <xyz>1 0 0</xyz>
@@ -147,7 +147,7 @@
       <namespace>orca_auv</namespace>
       <topic>thruster_0/set_output_force_N</topic>
 
-      <joint_name>thruster0_joint</joint_name>
+      <joint_name>thruster_0_joint</joint_name>
 
       <fluid_density>1000</fluid_density>
       <propeller_diameter>0.076</propeller_diameter>
