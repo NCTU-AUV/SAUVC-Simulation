@@ -145,6 +145,8 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
+      <topic>thruster_0/set_output_force_N</topic>
+
       <joint_name>thruster0_joint</joint_name>
 
       <fluid_density>1000</fluid_density>
