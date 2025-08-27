@@ -99,7 +99,7 @@
 
     <link name="thruster0">
 
-      <pose relative_to="main_body">-0.4 0 0 0 0 0</pose>
+      <pose relative_to="main_body">0.150 0.237 0 0 1.5707963268 0</pose>
 
       <inertial>
         <mass>0.427</mass>
