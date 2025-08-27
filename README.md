@@ -8,6 +8,10 @@
 4. To another terminal run `make enter_container`, and run `ign gazebo -v 4 -s -r <world_file.sdf>`.
 5. To [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (at least I know Safari works).
 
+## Test Thrustes
+
+Use `ign topic -t /orca_auv/thruster_0/set_output_force_N -m ignition.msgs.Double -p 'data: 5'`.
+
 ## How to Create a Model
 
 Following [Blender SDF Exporter](https://github.com/gazebosim/gz-sim/blob/ignition-gazebo6_6.17.0/tutorials/blender_sdf_exporter.md), 
