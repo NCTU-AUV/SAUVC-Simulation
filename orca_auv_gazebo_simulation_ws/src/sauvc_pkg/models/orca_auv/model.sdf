@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="orca_auv">
+
+    <link name="main_hull">
+
+      <visual name="visual">
+
+        <pose>0 0 0.115 0 1.5707963268 0</pose>
+
+        <geometry>
+          <cylinder>
+            <radius>0.115</radius>
+            <length>0.6</length>
+          </cylinder>
+        </geometry>
+
+        <material>
+          <ambient>0.0 1.0 0.0 0.0</ambient>
+          <diffuse>0.0 1.0 0.0 0.0</diffuse>
+          <specular>0.25 0.25 0.25 1.0</specular>
+        </material>
+
+      </visual>
+
+    </link>
+
+    <link name="main_frame">
+
+      <visual name="visual">
+
+        <pose>0 0 -0.070 0 0 0</pose>
+
+        <geometry>
+          <box>
+            <size>0.6 0.340 0.140</size>
+          </box>
+        </geometry>
+
+        <material>
+          <ambient>0.0 0.0 0.0 0.0</ambient>
+          <diffuse>0.0 0.0 0.0 0.0</diffuse>
+          <specular>0.25 0.25 0.25 1.0</specular>
+        </material>
+
+      </visual>
+
+    </link>
+
+  </model>
+</sdf>
