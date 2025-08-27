@@ -5,26 +5,25 @@
     <link name="main_hull">
 
       <inertial>
-        <mass>24.8</mass>
+        <mass>23</mass>
         <inertia>
-          <ixx>0.15195</ixx>
+          <ixx>0.2</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.435975</iyy>
+          <iyy>0.5</iyy>
           <iyz>0</iyz>
-          <izz>0.435975</izz>
+          <izz>0.5</izz>
         </inertia>
       </inertial>
 
       <collision name="main_body_buoyancy">
 
-        <pose>0 0 0.115 0 1.5707963268 0</pose>
+        <pose>0 0 0.115 0 0 0</pose>
 
         <geometry>
-          <cylinder>
-            <radius>0.115</radius>
-            <length>0.6</length>
-          </cylinder>
+          <box>
+            <size>0.6 0.200 0.200</size>
+          </box>
         </geometry>
 
       </collision>
