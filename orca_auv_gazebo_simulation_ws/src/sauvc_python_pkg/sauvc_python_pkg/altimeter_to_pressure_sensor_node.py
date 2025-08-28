@@ -3,6 +3,7 @@ from rclpy.node import Node
 
 from ros_gz_interfaces.msg import Altimeter
 from std_msgs.msg import Float64
+from std_msgs.msg import Float32
 
 
 class AltimeterToPressureSensorNode(Node):
@@ -16,13 +17,13 @@ class AltimeterToPressureSensorNode(Node):
             10)
         self._altimeter_subscription  # prevent unused variable warning
 
-        self._pressure_sensor_depth_publisher = self.create_publisher(Float64, 'pressure_sensor_depth_m', 10)
+        self._pressure_sensor_depth_publisher = self.create_publisher(Float32, 'pressure_sensor_depth_m', 10)
 
     def _altimeter_subscription_callback(self, msg):
         altitude_m = msg.vertical_position
         pressure_sensor_depth_m = -altitude_m
 
-        publish_msg = Float64()
+        publish_msg = Float32()
         publish_msg.data = pressure_sensor_depth_m
 
         self._pressure_sensor_depth_publisher.publish(publish_msg)
