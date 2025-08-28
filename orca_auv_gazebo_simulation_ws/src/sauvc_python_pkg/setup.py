@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'altimeter_to_pressure_sensor_node = sauvc_python_pkg.altimeter_to_pressure_sensor_node:main',
         ],
     },
 )

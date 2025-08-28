@@ -11,6 +11,18 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
+- ros_topic_name: "/orca_auv/altimeter"
+  gz_topic_name: "/orca_auv/altimeter"
+  ros_type_name: "ros_gz_interfaces/msg/Altimeter"
+  gz_type_name: "ignition.msgs.Altimeter"
+  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
+  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
+  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
+
 - ros_topic_name: "/orca_auv/thruster_0/set_output_force_N"
   gz_topic_name: "/orca_auv/thruster_0/set_output_force_N"
   ros_type_name: "std_msgs/msg/Float64"

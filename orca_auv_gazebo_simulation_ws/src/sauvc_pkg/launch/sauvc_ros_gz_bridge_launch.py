@@ -13,4 +13,8 @@ def generate_launch_description():
                 {'config_file': PathJoinSubstitution([FindPackageShare('sauvc_pkg'), 'config', 'sauvc_ros_gz_bridge_config.yaml'])},
             ],
         ),
+        Node(
+            package='sauvc_python_pkg',
+            executable='altimeter_to_pressure_sensor_node',
+        ),
     ])

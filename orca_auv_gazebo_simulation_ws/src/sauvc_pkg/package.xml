@@ -8,6 +8,7 @@
   <license>TODO: License declaration</license>
 
   <depend>ros_gz_bridge</depend>
+  <depend>sauvc_python_pkg</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
