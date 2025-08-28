@@ -1,0 +1,24 @@
+# # Full set of configurations
+# - ros_topic_name: "ros_chatter"
+#   gz_topic_name: "gz_chatter"
+#   ros_type_name: "std_msgs/msg/String"
+#   gz_type_name: "gz.msgs.StringMsg"
+#   subscriber_queue: 5       # Default 10 if qos_profile is empty, otherwise not set by default
+#   publisher_queue: 6        # Default 10 if qos_profile is empty, otherwise not set by default
+#   lazy: true                # Default "false"
+#   direction: BIDIRECTIONAL  # Default "BIDIRECTIONAL" - Bridge both directions
+#                             # "GZ_TO_ROS" - Bridge Gz topic to ROS
+#                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
+#   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
+
+- ros_topic_name: "/orca_auv/thruster_0/set_output_force"
+  gz_topic_name: "/orca_auv/thruster_0/set_output_force"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "ignition.msgs.Double"
+  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
+  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
+  lazy: false                # Default "false"
+  direction: BIDIRECTIONAL  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
+  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size

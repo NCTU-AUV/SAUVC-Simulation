@@ -11,6 +11,12 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+install(DIRECTORY config/
+        DESTINATION share/${PROJECT_NAME}/config)
+
+install(DIRECTORY launch/
+        DESTINATION share/${PROJECT_NAME}/launch)
+
 # --- Install non-code assets ---
 install(DIRECTORY models/
         DESTINATION share/${PROJECT_NAME}/models)
