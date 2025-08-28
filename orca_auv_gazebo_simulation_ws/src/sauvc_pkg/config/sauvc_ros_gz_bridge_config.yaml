@@ -11,8 +11,8 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thruster_0/set_output_force"
-  gz_topic_name: "/orca_auv/thruster_0/set_output_force"
+- ros_topic_name: "/orca_auv/thruster_0/set_output_force_N"
+  gz_topic_name: "/orca_auv/thruster_0/set_output_force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
