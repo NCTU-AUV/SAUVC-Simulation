@@ -16,6 +16,7 @@ build_container:
 
 	docker exec $(CONTAINER_NAME) /bin/bash -i -c \
 		"cd $(WORKSPACE) \
+		&& rosdep install --from-paths src -y \
 		&& colcon build --symlink-install \
 		&& echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
 
