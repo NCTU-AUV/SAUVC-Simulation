@@ -12,6 +12,10 @@
 
 Use `ign topic -t /orca_auv/thruster_0/set_output_force_N -m ignition.msgs.Double -p 'data: 5'`.
 
+## Bridge to ROS2
+
+Run `ros2 launch sauvc_pkg sauvc_ros_gz_bridge_launch.py`.
+
 ## How to Create a Model
 
 Following [Blender SDF Exporter](https://github.com/gazebosim/gz-sim/blob/ignition-gazebo6_6.17.0/tutorials/blender_sdf_exporter.md), 
