@@ -70,6 +70,7 @@
         <update_rate>100</update_rate>
         <visualize>true</visualize>
         <topic>/orca_auv/imu</topic>
+        <pose>0 0 0 0 3.1415926536 0</pose>
 
         <plugin filename="libignition-gazebo-imu-system.so"
                 name="ignition::gazebo::systems::Imu">
