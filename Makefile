@@ -1,41 +1,58 @@
 IMAGE_NAME := orca-auv-gazebo-simulation-image
 CONTAINER_NAME := orca-auv-gazebo-simulation-container
 WORKSPACE := orca_auv_gazebo_simulation_ws
+PWD := $(shell pwd)
+# Prefer Docker Compose v2 (docker compose) but fall back to v1 (docker-compose); allow override via env/CLI
+COMPOSE ?= $(shell \
+	if docker compose version >/dev/null 2>&1; then \
+		printf "docker compose"; \
+	elif docker-compose --version >/dev/null 2>&1; then \
+		printf "docker-compose"; \
+	else \
+		printf ""; \
+	fi)
+ifeq ($(strip $(COMPOSE)),)
+$(error Docker Compose not found: install Docker Compose v2 (docker compose) or v1 (docker-compose), or set COMPOSE to your compose binary)
+endif
 
+.PHONY: all compose_up compose_down compose_build compose_shell compose_init compose_clean network_certification clean
 
-all: network_certification build_container enter_container
+all: compose_up
 
-build_container:
-	@echo "Creating and starting a new container: $(CONTAINER_NAME)"
-	docker run -dit \
-		--name $(CONTAINER_NAME) \
-		-v $(PWD)/$(WORKSPACE):/root/$(WORKSPACE) \
-		-p 9002:9002 \
-		-v $(PWD)/certs:/ign-certs:ro \
-		$(IMAGE_NAME):latest
+compose_up: network_certification
+	$(COMPOSE) up -d --build
 
-	docker exec $(CONTAINER_NAME) /bin/bash -i -c \
-		"cd $(WORKSPACE) \
-		&& rosdep install --from-paths src --ignore-src -y \
-		&& colcon build --symlink-install \
-		&& echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
+compose_down:
+	$(COMPOSE) down
 
-build_image:
-	docker build --pull -t $(IMAGE_NAME):latest .
+compose_build:
+	$(COMPOSE) build --pull
 
-enter_container:
-	@echo "Executing a shell inside container: $(CONTAINER_NAME)"
-	docker exec -it $(CONTAINER_NAME) /bin/bash
+compose_shell:
+	$(COMPOSE) exec orca /bin/bash -lc "\
+		source /opt/ros/humble/setup.bash; \
+		if [ -f $(WORKSPACE)/install/setup.bash ]; then \
+			source $(WORKSPACE)/install/setup.bash; \
+		fi; \
+		exec bash"
+
+compose_init: compose_up
+	$(COMPOSE) exec orca /bin/bash -lc "\
+		cd $(WORKSPACE) && \
+		rosdep install --from-paths src --ignore-src -y && \
+		colcon build --symlink-install && \
+		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
+
+compose_clean:
+	$(COMPOSE) down -v
+
+network_certification:
+	mkdir -p certs
+	cd certs && (mkcert -install || echo "mkcert -install failed; assuming CA already installed") && mkcert localhost 127.0.0.1 ::1
 
 clean:
-	docker rm -f $(CONTAINER_NAME) || true
+	-$(COMPOSE) down || true
 	rm -rf certs
 	rm -rf orca_auv_gazebo_simulation_ws/build
 	rm -rf orca_auv_gazebo_simulation_ws/install
 	rm -rf orca_auv_gazebo_simulation_ws/log
-
-network_certification:
-	bash -c "mkdir certs \
-		&& cd certs \
-		&& mkcert -install \
-		&& mkcert localhost 127.0.0.1 ::1"
