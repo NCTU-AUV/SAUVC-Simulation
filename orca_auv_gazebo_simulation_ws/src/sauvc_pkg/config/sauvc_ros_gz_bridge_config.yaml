@@ -11,6 +11,18 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
+- ros_topic_name: "/orca_auv/bottom_camera/image_raw"
+  gz_topic_name: "/orca_auv/bottom_camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
+  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
+                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
+                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
+  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
+
 - ros_topic_name: "/orca_auv/imu"
   gz_topic_name: "/orca_auv/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
