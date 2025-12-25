@@ -1,0 +1,16 @@
+services:
+  orca:
+    container_name: ${CONTAINER_NAME:-orca-auv-gazebo-simulation-container}
+    image: ${IMAGE_NAME:-orca-auv-gazebo-simulation-image}:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    ports:
+      - "9002:9002"
+    volumes:
+      - ./orca_auv_gazebo_simulation_ws:/root/orca_auv_gazebo_simulation_ws
+      - ./certs:/ign-certs:ro
+    working_dir: /root
+    command: ["/bin/bash", "-lc", "tail -f /dev/null"]
