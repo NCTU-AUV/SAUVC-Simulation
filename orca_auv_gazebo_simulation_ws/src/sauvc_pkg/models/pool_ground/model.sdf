@@ -38,7 +38,7 @@
           <emissive>0 0 0 1</emissive>
           <pbr>
             <metal>
-              <albedo_map>model://pool_ground/materials/textures/pool_bottom_tiles_highres.png</albedo_map>
+              <albedo_map>model://pool_ground/materials/textures/pool_bottom_tiles_thicker_lines.png</albedo_map>
             </metal>
           </pbr>
         </material>
