@@ -45,6 +45,115 @@
             <direction>-0.5 0.1 -0.9</direction>
         </light>
 
+        <model name="pool_structure">
+            <static>true</static>
+            <pose>0 0 -2.2 0 0 0</pose>
+
+            <include>
+                <uri>model://pool_ground</uri>
+                <pose>0 0 0 0 0 0</pose>
+                <!-- <static>1</static> -->
+            </include>
+
+            <!-- Long walls (x direction) -->
+            <link name="wall_x_pos">
+                <pose>25.15 0 1.1 0 0 0</pose>
+                <collision name="col">
+                <geometry>
+                    <box>
+                    <size>0.3 25.6 2.2</size>
+                    </box>
+                </geometry>
+                </collision>
+                <visual name="vis">
+                <geometry>
+                    <box>
+                    <size>0.3 25.6 2.2</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.8 0.9 1</ambient>
+                    <diffuse>0.7 0.8 0.9 1</diffuse>
+                    <specular>0.3 0.3 0.3 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+                </visual>
+            </link>
+
+            <link name="wall_x_neg">
+                <pose>-25.15 0 1.1 0 0 0</pose>
+                <collision name="col">
+                <geometry>
+                    <box>
+                    <size>0.3 25.6 2.2</size>
+                    </box>
+                </geometry>
+                </collision>
+                <visual name="vis">
+                <geometry>
+                    <box>
+                    <size>0.3 25.6 2.2</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.8 0.9 1</ambient>
+                    <diffuse>0.7 0.8 0.9 1</diffuse>
+                    <specular>0.3 0.3 0.3 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+                </visual>
+            </link>
+
+            <!-- Short walls (y direction) -->
+            <link name="wall_y_pos">
+                <pose>0 12.65 1.1 0 0 0</pose>
+                <collision name="col">
+                <geometry>
+                    <box>
+                    <size>50 0.3 2.2</size>
+                    </box>
+                </geometry>
+                </collision>
+                <visual name="vis">
+                <geometry>
+                    <box>
+                    <size>50 0.3 2.2</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.8 0.9 1</ambient>
+                    <diffuse>0.7 0.8 0.9 1</diffuse>
+                    <specular>0.3 0.3 0.3 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+                </visual>
+            </link>
+
+            <link name="wall_y_neg">
+                <pose>0 -12.65 1.1 0 0 0</pose>
+                <collision name="col">
+                <geometry>
+                    <box>
+                    <size>50 0.3 2.2</size>
+                    </box>
+                </geometry>
+                </collision>
+                <visual name="vis">
+                <geometry>
+                    <box>
+                    <size>50 0.3 2.2</size>
+                    </box>
+                </geometry>
+                <material>
+                    <ambient>0.7 0.8 0.9 1</ambient>
+                    <diffuse>0.7 0.8 0.9 1</diffuse>
+                    <specular>0.3 0.3 0.3 1</specular>
+                    <emissive>0 0 0 1</emissive>
+                </material>
+                </visual>
+            </link>
+        </model>
+
         <include>
             <pose>0 0 0 0.1 0.1 0.1</pose>
             <uri>orca_auv</uri>
