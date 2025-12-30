@@ -100,7 +100,7 @@
 
       <sensor name="orca_auv_altimeter" type="altimeter">
         <always_on>true</always_on>
-        <update_rate>100</update_rate>
+        <update_rate>20</update_rate>
         <visualize>true</visualize>
         <topic>/orca_auv/altimeter</topic>
         <pose>0 0.115 0 0 0 1.5707963268</pose>
