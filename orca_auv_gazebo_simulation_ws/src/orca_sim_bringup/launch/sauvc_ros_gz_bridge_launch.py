@@ -10,11 +10,11 @@ def generate_launch_description():
             package='ros_gz_bridge',
             executable='parameter_bridge',
             parameters=[
-                {'config_file': PathJoinSubstitution([FindPackageShare('sauvc_pkg'), 'config', 'sauvc_ros_gz_bridge_config.yaml'])},
+                {'config_file': PathJoinSubstitution([FindPackageShare('orca_sim_bringup'), 'config', 'sauvc_ros_gz_bridge_config.yaml'])},
             ],
         ),
         Node(
-            package='sauvc_python_pkg',
+            package='orca_sim_bridge',
             executable='altimeter_to_pressure_sensor_node',
         ),
     ])

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'sauvc_python_pkg'
+package_name = 'orca_sim_bridge'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'altimeter_to_pressure_sensor_node = sauvc_python_pkg.altimeter_to_pressure_sensor_node:main',
+            'altimeter_to_pressure_sensor_node = orca_sim_bridge.altimeter_to_pressure_sensor_node:main',
         ],
     },
 )
