@@ -26,7 +26,7 @@ install(DIRECTORY worlds/
 
 # --- Environment hook to expose assets to Gazebo ---
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/${PROJECT_NAME}_resource_path.dsv.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/orca_sim_bringup_resource_path.dsv.in
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_resource_path.dsv
   @ONLY
 )
