@@ -1,4 +1,4 @@
-# SAUVC-Gazebo-Simulation
+# Orca AUV Gazebo Simulation
 
 ## How to Start
 
@@ -44,7 +44,7 @@
 
     `docker run --rm --gpus all nvidia/cuda:12.2.0-base-ubuntu22.04 nvidia-smi`
 
-5. Enter the SAUVC-Simulation repo
+5. Enter the repo
 
     `cd ~/workspace/SAUVC-Simulation`
 
@@ -171,7 +171,7 @@
 
 11. Launch Gazebo GUI with GPU acceleration
 
-    `ign gazebo -v 4 /root/orca_auv_gazebo_simulation_ws/src/sauvc_pkg/worlds/water_world.sdf`
+    `ign gazebo -v 4 /root/orca_auv_gazebo_simulation_ws/src/orca_sim_bringup/worlds/water_world.sdf`
 
 ## Test Thrustes
 
@@ -179,7 +179,7 @@ Use `ign topic -t /orca_auv/thruster_0/set_output_force_N -m ignition.msgs.Doubl
 
 ## Bridge to ROS2
 
-Run `ros2 launch sauvc_pkg sauvc_ros_gz_bridge_launch.py`.
+Run `ros2 launch orca_sim_bringup orca_ros_gz_bridge_launch.py`.
 
 ## How to Create a Model
 
