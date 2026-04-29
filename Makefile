@@ -39,6 +39,7 @@ compose_shell:
 compose_init: compose_up
 	$(COMPOSE) exec orca /bin/bash -lc "\
 		cd $(WORKSPACE) && \
+		source /opt/ros/humble/setup.bash && \
 		rosdep install --from-paths src --ignore-src -y && \
 		colcon build --symlink-install && \
 		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
