@@ -197,7 +197,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/0/force_N</topic>
+      <topic>thrusters/thruster_0/force_N</topic>
 
       <joint_name>thruster_0_joint</joint_name>
 
@@ -258,7 +258,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/1/force_N</topic>
+      <topic>thrusters/thruster_1/force_N</topic>
 
       <joint_name>thruster_1_joint</joint_name>
 
@@ -319,7 +319,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/2/force_N</topic>
+      <topic>thrusters/thruster_2/force_N</topic>
 
       <joint_name>thruster_2_joint</joint_name>
 
@@ -380,7 +380,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/3/force_N</topic>
+      <topic>thrusters/thruster_3/force_N</topic>
 
       <joint_name>thruster_3_joint</joint_name>
 
@@ -441,7 +441,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/4/force_N</topic>
+      <topic>thrusters/thruster_4/force_N</topic>
 
       <joint_name>thruster_4_joint</joint_name>
 
@@ -502,7 +502,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/5/force_N</topic>
+      <topic>thrusters/thruster_5/force_N</topic>
 
       <joint_name>thruster_5_joint</joint_name>
 
@@ -563,7 +563,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/6/force_N</topic>
+      <topic>thrusters/thruster_6/force_N</topic>
 
       <joint_name>thruster_6_joint</joint_name>
 
@@ -624,7 +624,7 @@
       filename="ignition-gazebo-thruster-system"
       name="ignition::gazebo::systems::Thruster">
       <namespace>orca_auv</namespace>
-      <topic>thrusters/7/force_N</topic>
+      <topic>thrusters/thruster_7/force_N</topic>
 
       <joint_name>thruster_7_joint</joint_name>
 

@@ -71,7 +71,7 @@
 
 ## Test Thrustes
 
-Use `ign topic -t /orca_auv/thruster_0/set_output_force_N -m ignition.msgs.Double -p 'data: 5'`.
+Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double -p 'data: 5'`.
 
 ## Bridge to ROS2
 
