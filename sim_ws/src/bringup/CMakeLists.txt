@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(orca_sim_bringup)
+project(bringup)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -26,7 +26,7 @@ install(DIRECTORY worlds/
 
 # --- Environment hook to expose assets to Gazebo ---
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/orca_sim_bringup_resource_path.dsv.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/bringup_resource_path.dsv.in
   ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_resource_path.dsv
   @ONLY
 )

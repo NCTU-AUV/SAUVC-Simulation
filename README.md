@@ -67,7 +67,7 @@
 
 9. Launch Gazebo GUI with GPU acceleration
 
-    `ign gazebo -v 4 /root/sim_ws/src/orca_sim_bringup/worlds/water_world.sdf`
+    `ign gazebo -v 4 /root/sim_ws/src/bringup/worlds/water_world.sdf`
 
 ## Test Thrustes
 
@@ -75,7 +75,7 @@ Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double
 
 ## Bridge to ROS2
 
-Run `ros2 launch orca_sim_bringup orca_ros_gz_bridge_launch.py`.
+Run `ros2 launch bringup orca_ros_gz_bridge_launch.py`.
 
 To use a different bridge namespace, pass `namespace:=<name>` and make sure the Gazebo model publishes topics under the same namespace.
 

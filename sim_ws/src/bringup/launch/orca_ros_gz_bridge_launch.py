@@ -21,7 +21,7 @@ def generate_launch_description():
             parameters=[
                 {
                     'config_file': PathJoinSubstitution([
-                        FindPackageShare('orca_sim_bringup'),
+                        FindPackageShare('bringup'),
                         'config',
                         'orca_ros_gz_bridge_config.yaml',
                     ]),
@@ -30,7 +30,7 @@ def generate_launch_description():
             ],
         ),
         Node(
-            package='orca_sim_bridge',
+            package='bridge',
             executable='altimeter_to_pressure_sensor_node',
             namespace=namespace,
         ),
