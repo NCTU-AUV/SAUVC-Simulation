@@ -12,12 +12,12 @@ class AltimeterToPressureSensorNode(Node):
         super().__init__('altimeter_to_pressure_sensor_node', namespace='orca_auv')
         self._altimeter_subscription = self.create_subscription(
             Altimeter,
-            '/orca_auv/altimeter',
+            '/orca_auv/sensors/altimeter',
             self._altimeter_subscription_callback,
             10)
         self._altimeter_subscription  # prevent unused variable warning
 
-        self._pressure_sensor_depth_publisher = self.create_publisher(Float32, 'pressure_sensor_depth_m', 10)
+        self._pressure_sensor_depth_publisher = self.create_publisher(Float32, 'sensors/depth_m', 10)
 
     def _altimeter_subscription_callback(self, msg):
         altitude_m = msg.vertical_position
