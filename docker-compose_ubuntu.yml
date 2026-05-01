@@ -21,7 +21,7 @@ orca:
     - "9002:9002"
 
     volumes:
-    - ./orca_auv_gazebo_simulation_ws:/root/orca_auv_gazebo_simulation_ws
+    - ./sim_ws:/root/sim_ws
     - ./certs:/ign-certs:ro
     - /tmp/.X11-unix:/tmp/.X11-unix:rw
 

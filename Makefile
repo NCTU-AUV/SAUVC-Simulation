@@ -1,6 +1,6 @@
 IMAGE_NAME := orca-auv-gazebo-simulation-image
 CONTAINER_NAME := orca-auv-gazebo-simulation-container
-WORKSPACE := orca_auv_gazebo_simulation_ws
+WORKSPACE := sim_ws
 PWD := $(shell pwd)
 # Prefer Docker Compose v2 (docker compose) but fall back to v1 (docker-compose); allow override via env/CLI
 COMPOSE ?= $(shell \
@@ -54,6 +54,6 @@ network_certification:
 clean:
 	-$(COMPOSE) down || true
 	rm -rf certs
-	rm -rf orca_auv_gazebo_simulation_ws/build
-	rm -rf orca_auv_gazebo_simulation_ws/install
-	rm -rf orca_auv_gazebo_simulation_ws/log
+	rm -rf sim_ws/build
+	rm -rf sim_ws/install
+	rm -rf sim_ws/log
