@@ -12,6 +12,6 @@ RUN apt-get update
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get install ignition-fortress -y
+RUN apt-get update && apt-get install ignition-fortress ros-humble-ros-gz-bridge -y
 
 WORKDIR /root/

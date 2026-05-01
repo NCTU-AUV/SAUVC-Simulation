@@ -4,14 +4,12 @@
 
 ### for macOS
 
-1. Run `make compose_build` to build the Docker image (first time or after Dockerfile changes).
-2. Run `make compose_up` to start the container (generates TLS certs via mkcert if needed).
-3. Run `make compose_init` to install dependencies and build the workspace inside the container.
-4. Run `make compose_shell`, then inside the container run `ign launch -v 4 sim_ws/websocket.ign`.
-5. In another terminal, run `make compose_shell` again and then `ign gazebo -v 4 -s -r <world_file.sdf>`.
-6. Go to [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (Safari confirmed to work).
+1. `make compose_init` (generates TLS certs, starts Docker, installs deps, and builds the workspace; first time or after source changes)
+2. `make compose_launch` to run the websocket server, Gazebo server, and `ros2 launch bringup orca_ros_gz_bridge_launch.py`
+3. Go to [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (Safari confirmed to work).
 
 > Note: `mkcert` must be installed locally for certificate generation.
+> By default `make compose_launch` uses `/root/sim_ws/src/bringup/worlds/water_world.sdf` and namespace `orca_auv`. Override them with `make compose_launch WORLD=/root/sim_ws/src/bringup/worlds/<world_file>.sdf NAMESPACE=<name>`.
 
 ### for Ubuntu
 
@@ -48,12 +46,9 @@
 
     `cd ~/workspace/SAUVC-Simulation`
 
-6. Rebuild + start the container and initialize the workspace
+6. Initialize the workspace
 
     ```bash
-    make -f Makefile_ubuntu compose_clean
-    make -f Makefile_ubuntu compose_build
-    make -f Makefile_ubuntu compose_up
     make -f Makefile_ubuntu compose_init
     ```
 
@@ -61,13 +56,9 @@
 
     `xhost +local:`
 
-8. Enter the container
+8. Launch Gazebo and the ROS bridge
 
-    `make compose_shell`
-
-9. Launch Gazebo GUI with GPU acceleration
-
-    `ign gazebo -v 4 /root/sim_ws/src/bringup/worlds/water_world.sdf`
+    `make -f Makefile_ubuntu compose_launch`
 
 ## Test Thrustes
 
@@ -75,7 +66,9 @@ Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double
 
 ## Bridge to ROS2
 
-Run `ros2 launch bringup orca_ros_gz_bridge_launch.py`.
+`make compose_launch` starts `ros2 launch bringup orca_ros_gz_bridge_launch.py` automatically.
+
+For manual bridge-only testing, enter the container with `make compose_shell` (`make -f Makefile_ubuntu compose_shell` on Ubuntu) and run `ros2 launch bringup orca_ros_gz_bridge_launch.py`.
 
 To use a different bridge namespace, pass `namespace:=<name>` and make sure the Gazebo model publishes topics under the same namespace.
 

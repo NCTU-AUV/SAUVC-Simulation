@@ -2,6 +2,8 @@ IMAGE_NAME := orca-auv-gazebo-simulation-image
 CONTAINER_NAME := orca-auv-gazebo-simulation-container
 WORKSPACE := sim_ws
 PWD := $(shell pwd)
+WORLD ?= /root/$(WORKSPACE)/src/bringup/worlds/water_world.sdf
+NAMESPACE ?= orca_auv
 
 COMPOSE_FILE ?= docker-compose_ubuntu.yml
 
@@ -20,7 +22,7 @@ endif
 
 COMPOSE_CMD := $(COMPOSE) -f $(COMPOSE_FILE)
 
-.PHONY: all compose_up compose_down compose_build compose_shell compose_init compose_clean network_certification clean
+.PHONY: all compose_up compose_down compose_build compose_shell compose_init compose_launch compose_clean network_certification clean
 
 all: compose_up
 
@@ -52,6 +54,20 @@ compose_init: compose_up
 		colcon build --symlink-install && \
 		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
 
+compose_launch: compose_up
+	$(COMPOSE_CMD) exec orca /bin/bash -lc "\
+		set -e; \
+		source /opt/ros/humble/setup.bash; \
+		source /root/$(WORKSPACE)/install/setup.bash; \
+		ign launch -v 4 /root/$(WORKSPACE)/websocket.ign & \
+		WEBSOCKET_PID=\$$!; \
+		ign gazebo -v 4 -r $(WORLD) & \
+		GAZEBO_PID=\$$!; \
+		ros2 launch bringup orca_ros_gz_bridge_launch.py namespace:=$(NAMESPACE) & \
+		BRIDGE_PID=\$$!; \
+		trap 'kill \$$WEBSOCKET_PID \$$GAZEBO_PID \$$BRIDGE_PID 2>/dev/null; wait 2>/dev/null' INT TERM EXIT; \
+		wait -n \$$WEBSOCKET_PID \$$GAZEBO_PID \$$BRIDGE_PID"
+
 compose_clean:
 	$(COMPOSE_CMD) down -v
 
@@ -60,8 +76,8 @@ network_certification:
 	cd certs && (mkcert -install || echo "mkcert -install failed; assuming CA already installed") && mkcert localhost 127.0.0.1 ::1
 
 clean:
-    -$(COMPOSE_CMD) down || true
-    rm -rf certs
-    rm -rf sim_ws/build
-    rm -rf sim_ws/install
-    rm -rf sim_ws/log
+	-$(COMPOSE_CMD) down || true
+	rm -rf certs
+	rm -rf sim_ws/build
+	rm -rf sim_ws/install
+	rm -rf sim_ws/log
