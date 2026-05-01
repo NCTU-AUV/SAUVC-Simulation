@@ -48,43 +48,6 @@
 
     `cd ~/workspace/SAUVC-Simulation`
 
-6. Replace docker-compose.yml to below
-
-    ```bash
-    services:
-    orca:
-        container_name: ${CONTAINER_NAME:-orca-auv-gazebo-simulation-container}
-        image: ${IMAGE_NAME:-orca-auv-gazebo-simulation-image}:latest
-        build:
-        context: .
-        dockerfile: Dockerfile
-        stdin_open: true
-        tty: true
-
-        gpus: all
-
-        environment:
-        - DISPLAY=${DISPLAY}
-        - QT_X11_NO_MITSHM=1
-        - NVIDIA_VISIBLE_DEVICES=all
-        - NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute,display
-        - __GLX_VENDOR_LIBRARY_NAME=nvidia
-
-        ports:
-        - "9002:9002"
-
-        volumes:
-        - ./orca_auv_gazebo_simulation_ws:/root/orca_auv_gazebo_simulation_ws
-        - ./certs:/ign-certs:ro
-        - /tmp/.X11-unix:/tmp/.X11-unix:rw
-
-        devices:
-        - /dev/dri:/dev/dri
-
-        working_dir: /root
-        command: ["/bin/bash", "-lc", "tail -f /dev/null"]
-    ```
-
 8. Rebuild + start the container and initialize the workspace
 
     ```bash
