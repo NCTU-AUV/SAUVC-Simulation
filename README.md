@@ -77,6 +77,8 @@ Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double
 
 Run `ros2 launch orca_sim_bringup orca_ros_gz_bridge_launch.py`.
 
+To use a different bridge namespace, pass `namespace:=<name>` and make sure the Gazebo model publishes topics under the same namespace.
+
 ## How to Create a Model
 
 Following [Blender SDF Exporter](https://github.com/gazebosim/gz-sim/blob/ignition-gazebo6_6.17.0/tutorials/blender_sdf_exporter.md), 

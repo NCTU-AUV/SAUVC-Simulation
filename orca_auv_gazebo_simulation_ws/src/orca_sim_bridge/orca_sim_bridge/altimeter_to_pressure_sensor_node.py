@@ -2,17 +2,16 @@ import rclpy
 from rclpy.node import Node
 
 from ros_gz_interfaces.msg import Altimeter
-from std_msgs.msg import Float64
 from std_msgs.msg import Float32
 
 
 class AltimeterToPressureSensorNode(Node):
 
     def __init__(self):
-        super().__init__('altimeter_to_pressure_sensor_node', namespace='orca_auv')
+        super().__init__('altimeter_to_pressure_sensor_node')
         self._altimeter_subscription = self.create_subscription(
             Altimeter,
-            '/orca_auv/sensors/altimeter',
+            'sensors/altimeter',
             self._altimeter_subscription_callback,
             10)
         self._altimeter_subscription  # prevent unused variable warning

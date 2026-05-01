@@ -11,8 +11,8 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/camera/bottom/image_raw"
-  gz_topic_name: "/orca_auv/camera/bottom/image_raw"
+- ros_topic_name: "camera/bottom/image_raw"
+  gz_topic_name: "camera/bottom/image_raw"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -23,8 +23,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/sensors/imu"
-  gz_topic_name: "/orca_auv/sensors/imu"
+- ros_topic_name: "sensors/imu"
+  gz_topic_name: "sensors/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -35,8 +35,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/sensors/altimeter"
-  gz_topic_name: "/orca_auv/sensors/altimeter"
+- ros_topic_name: "sensors/altimeter"
+  gz_topic_name: "sensors/altimeter"
   ros_type_name: "ros_gz_interfaces/msg/Altimeter"
   gz_type_name: "ignition.msgs.Altimeter"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -47,8 +47,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_0/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_0/force_N"
+- ros_topic_name: "thrusters/thruster_0/force_N"
+  gz_topic_name: "thrusters/thruster_0/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -59,8 +59,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_1/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_1/force_N"
+- ros_topic_name: "thrusters/thruster_1/force_N"
+  gz_topic_name: "thrusters/thruster_1/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -71,8 +71,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_2/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_2/force_N"
+- ros_topic_name: "thrusters/thruster_2/force_N"
+  gz_topic_name: "thrusters/thruster_2/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -83,8 +83,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_3/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_3/force_N"
+- ros_topic_name: "thrusters/thruster_3/force_N"
+  gz_topic_name: "thrusters/thruster_3/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -95,8 +95,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_4/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_4/force_N"
+- ros_topic_name: "thrusters/thruster_4/force_N"
+  gz_topic_name: "thrusters/thruster_4/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -107,8 +107,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_5/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_5/force_N"
+- ros_topic_name: "thrusters/thruster_5/force_N"
+  gz_topic_name: "thrusters/thruster_5/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -119,8 +119,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_6/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_6/force_N"
+- ros_topic_name: "thrusters/thruster_6/force_N"
+  gz_topic_name: "thrusters/thruster_6/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
@@ -131,8 +131,8 @@
                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
   qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/thrusters/thruster_7/force_N"
-  gz_topic_name: "/orca_auv/thrusters/thruster_7/force_N"
+- ros_topic_name: "thrusters/thruster_7/force_N"
+  gz_topic_name: "thrusters/thruster_7/force_N"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "ignition.msgs.Double"
   subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
