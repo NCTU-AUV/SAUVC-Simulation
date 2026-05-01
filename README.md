@@ -48,7 +48,7 @@
 
     `cd ~/workspace/SAUVC-Simulation`
 
-8. Rebuild + start the container and initialize the workspace
+6. Rebuild + start the container and initialize the workspace
 
     ```bash
     make -f Makefile_ubuntu compose_clean
@@ -57,15 +57,15 @@
     make -f Makefile_ubuntu compose_init
     ```
 
-9. Allow X11 connections (host)
+7. Allow X11 connections (host)
 
     `xhost +local:`
 
-10. Enter the container
+8. Enter the container
 
     `make compose_shell`
 
-11. Launch Gazebo GUI with GPU acceleration
+9. Launch Gazebo GUI with GPU acceleration
 
     `ign gazebo -v 4 /root/orca_auv_gazebo_simulation_ws/src/orca_sim_bringup/worlds/water_world.sdf`
 
