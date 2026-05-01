@@ -4,12 +4,13 @@
 
 ### for macOS
 
-1. `make compose_init` (generates TLS certs, starts Docker, installs deps, and builds the workspace; first time or after source changes)
-2. `make compose_launch` to run the websocket server, Gazebo server, and `ros2 launch bringup orca_ros_gz_bridge_launch.py`
-3. Go to [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (Safari confirmed to work).
+1. `make init` (generates TLS certs, starts Docker, installs deps, and builds the workspace; first time or after source changes)
+2. `make launch` to run the websocket server, Gazebo server, and `ros2 launch bringup orca_ros_gz_bridge_launch.py`
+3. Or run `make` to do both in sequence.
+4. Go to [https://app.gazebosim.org/visualization](https://app.gazebosim.org/visualization) and connect to [wss://localhost:9002](wss://localhost:9002) (Safari confirmed to work).
 
 > Note: `mkcert` must be installed locally for certificate generation.
-> By default `make compose_launch` uses `/root/sim_ws/src/bringup/worlds/water_world.sdf` and namespace `orca_auv`. Override them with `make compose_launch WORLD=/root/sim_ws/src/bringup/worlds/<world_file>.sdf NAMESPACE=<name>`.
+> By default `make launch` uses `/root/sim_ws/src/bringup/worlds/water_world.sdf` and namespace `orca_auv`. Override them with `make launch WORLD=/root/sim_ws/src/bringup/worlds/<world_file>.sdf NAMESPACE=<name>`.
 
 ### for Ubuntu
 
@@ -49,7 +50,7 @@
 6. Initialize the workspace
 
     ```bash
-    make -f Makefile_ubuntu compose_init
+    make -f Makefile_ubuntu init
     ```
 
 7. Allow X11 connections (host)
@@ -58,7 +59,7 @@
 
 8. Launch Gazebo and the ROS bridge
 
-    `make -f Makefile_ubuntu compose_launch`
+    `make -f Makefile_ubuntu launch`
 
 ## Test Thrustes
 
@@ -66,7 +67,7 @@ Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double
 
 ## Bridge to ROS2
 
-`make compose_launch` starts `ros2 launch bringup orca_ros_gz_bridge_launch.py` automatically.
+`make launch` starts `ros2 launch bringup orca_ros_gz_bridge_launch.py` automatically.
 
 For manual bridge-only testing, enter the container with `make compose_shell` (`make -f Makefile_ubuntu compose_shell` on Ubuntu) and run `ros2 launch bringup orca_ros_gz_bridge_launch.py`.
 

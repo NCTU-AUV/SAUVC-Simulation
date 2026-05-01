@@ -17,9 +17,9 @@ ifeq ($(strip $(COMPOSE)),)
 $(error Docker Compose not found: install Docker Compose v2 (docker compose) or v1 (docker-compose), or set COMPOSE to your compose binary)
 endif
 
-.PHONY: all compose_up compose_down compose_build compose_shell compose_init compose_launch compose_clean network_certification clean
+.PHONY: all compose_up compose_down compose_build compose_shell init launch compose_init compose_launch compose_clean network_certification clean
 
-all: compose_up
+all: init launch
 
 compose_up: network_certification
 	$(COMPOSE) up -d --build
@@ -38,7 +38,7 @@ compose_shell:
 		fi; \
 		exec bash"
 
-compose_init: compose_up
+init: compose_up
 	$(COMPOSE) exec orca /bin/bash -lc "\
 		cd $(WORKSPACE) && \
 		source /opt/ros/humble/setup.bash && \
@@ -46,7 +46,7 @@ compose_init: compose_up
 		colcon build --symlink-install && \
 		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
 
-compose_launch: compose_up
+launch: compose_up
 	$(COMPOSE) exec orca /bin/bash -lc "\
 		set -e; \
 		source /opt/ros/humble/setup.bash; \
@@ -59,6 +59,10 @@ compose_launch: compose_up
 		BRIDGE_PID=\$$!; \
 		trap 'kill \$$WEBSOCKET_PID \$$GAZEBO_PID \$$BRIDGE_PID 2>/dev/null; wait 2>/dev/null' INT TERM EXIT; \
 		wait -n \$$WEBSOCKET_PID \$$GAZEBO_PID \$$BRIDGE_PID"
+
+compose_init: init
+
+compose_launch: launch
 
 compose_clean:
 	$(COMPOSE) down -v
