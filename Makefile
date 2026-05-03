@@ -4,6 +4,11 @@ WORKSPACE := sim_ws
 PWD := $(shell pwd)
 WORLD ?= /root/$(WORKSPACE)/src/bringup/worlds/water_world.sdf
 NAMESPACE ?= orca_auv
+ROS_DOMAIN_ID ?= 0
+ROS_LOCALHOST_ONLY ?= 0
+RMW_IMPLEMENTATION ?= rmw_fastrtps_cpp
+ROS_NET_ENV := ROS_DOMAIN_ID=$(ROS_DOMAIN_ID) ROS_LOCALHOST_ONLY=$(ROS_LOCALHOST_ONLY) RMW_IMPLEMENTATION=$(RMW_IMPLEMENTATION)
+ROS_EXEC_ENV := -e ROS_DOMAIN_ID=$(ROS_DOMAIN_ID) -e ROS_LOCALHOST_ONLY=$(ROS_LOCALHOST_ONLY) -e RMW_IMPLEMENTATION=$(RMW_IMPLEMENTATION)
 # Prefer Docker Compose v2 (docker compose) but fall back to v1 (docker-compose); allow override via env/CLI
 COMPOSE ?= $(shell \
 	if docker compose version >/dev/null 2>&1; then \
@@ -22,16 +27,16 @@ endif
 all: init launch
 
 compose_up: network_certification
-	$(COMPOSE) up -d --build
+	$(ROS_NET_ENV) $(COMPOSE) up -d --build
 
 compose_down:
 	$(COMPOSE) down
 
 compose_build:
-	$(COMPOSE) build --pull
+	$(ROS_NET_ENV) $(COMPOSE) build --pull
 
 compose_shell:
-	$(COMPOSE) exec orca /bin/bash -lc "\
+	$(ROS_NET_ENV) $(COMPOSE) exec $(ROS_EXEC_ENV) orca /bin/bash -lc "\
 		source /opt/ros/humble/setup.bash; \
 		if [ -f $(WORKSPACE)/install/setup.bash ]; then \
 			source $(WORKSPACE)/install/setup.bash; \
@@ -39,7 +44,7 @@ compose_shell:
 		exec bash"
 
 init: compose_up
-	$(COMPOSE) exec orca /bin/bash -lc "\
+	$(ROS_NET_ENV) $(COMPOSE) exec $(ROS_EXEC_ENV) orca /bin/bash -lc "\
 		cd $(WORKSPACE) && \
 		source /opt/ros/humble/setup.bash && \
 		rosdep install --from-paths src --ignore-src -y && \
@@ -47,7 +52,7 @@ init: compose_up
 		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
 
 launch: compose_up
-	$(COMPOSE) exec orca /bin/bash -lc "\
+	$(ROS_NET_ENV) $(COMPOSE) exec $(ROS_EXEC_ENV) orca /bin/bash -lc "\
 		set -e; \
 		source /opt/ros/humble/setup.bash; \
 		source /root/$(WORKSPACE)/install/setup.bash; \
