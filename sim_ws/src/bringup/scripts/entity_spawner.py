@@ -130,10 +130,10 @@ class EntitySpawner(Node):
         ]
         shuffled_slots = drum_positions[:]
         self.rng.shuffle(shuffled_slots)
-        # self.spawn_model('blue_drum', 'blue_drum', *shuffled_slots[0], yaw=0.0)
-        # for index, drum_pose in enumerate(shuffled_slots[1:]):
-            # self.spawn_model('red_drum', f'red_drum_{index}', *drum_pose, yaw=0.0)
-        # self.get_logger().info(f'Drum order: {shuffled_slots}')
+        self.spawn_model('blue_drum', 'blue_drum', *shuffled_slots[0], yaw=0.0)
+        for index, drum_pose in enumerate(shuffled_slots[1:]):
+            self.spawn_model('red_drum', f'red_drum_{index}', *drum_pose, yaw=0.0)
+        self.get_logger().info(f'Drum order: {shuffled_slots}')
 
         placed_positions = [
             (gate_x, gate_y),
