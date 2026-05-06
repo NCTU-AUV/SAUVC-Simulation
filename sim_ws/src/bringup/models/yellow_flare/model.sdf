@@ -36,10 +36,10 @@
           <shader type='pixel'>
             <normal_map>__default__</normal_map>
           </shader>
-          <ambient>1 1 0.3 1</ambient>
-          <diffuse>1 1 0.7 1</diffuse>
+          <ambient>1 1 0 1</ambient>
+          <diffuse>1 1 0 1</diffuse>
           <specular>0.01 0.01 0.01 1</specular>
-          <emissive>0 0 0 1</emissive>
+          <emissive>1 1 0 0.05</emissive>
         </material>
         <transparency>0</transparency>
         <cast_shadows>1</cast_shadows>
