@@ -7,8 +7,16 @@
   <maintainer email="dianyueguo@gmail.com">root</maintainer>
   <license>TODO: License declaration</license>
 
+  <depend>ament_index_python</depend>
+  <depend>geometry_msgs</depend>
   <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_interfaces</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>rclpy</depend>
   <depend>bridge</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="qualification_start_line">
+    <static>true</static>
+    <link name="marker">
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>1.0 0.08 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1 0.6 0.1 1</ambient>
+          <diffuse>1 0.6 0.1 1</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
