@@ -66,7 +66,6 @@ launch: compose_up
 		source /root/$(WORKSPACE)/install/setup.bash; \
 		ign launch -v 4 /root/$(WORKSPACE)/websocket.ign & \
 		WEBSOCKET_PID=\$$!; \
-		ign gazebo -v 4 -r $(WORLD) & \
 		GAZEBO_PID=\$$!; \
 		ros2 launch bringup orca_ros_gz_bridge_launch.py namespace:=$(NAMESPACE) & \
 		BRIDGE_PID=\$$!; \
