@@ -11,8 +11,8 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "/orca_auv/color/image_raw"
-  gz_topic_name: "/orca_auv/realsense/image"
+- ros_topic_name: "color/image_raw"
+  gz_topic_name: "realsense/image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10
@@ -21,8 +21,8 @@
   direction: GZ_TO_ROS
   qos_profile: SENSOR_DATA
 
-- ros_topic_name: "/orca_auv/color/camera_info"
-  gz_topic_name: "/orca_auv/realsense/camera_info"
+- ros_topic_name: "color/camera_info"
+  gz_topic_name: "realsense/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10
@@ -31,8 +31,8 @@
   direction: GZ_TO_ROS
   qos_profile: SENSOR_DATA
 
-- ros_topic_name: "/orca_auv/depth/image_raw"
-  gz_topic_name: "/orca_auv/realsense/depth_image"
+- ros_topic_name: "depth/image_raw"
+  gz_topic_name: "realsense/depth_image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10
@@ -41,8 +41,8 @@
   direction: GZ_TO_ROS
   qos_profile: SENSOR_DATA
 
-- ros_topic_name: "/orca_auv/depth/camera_info"
-  gz_topic_name: "/orca_auv/realsense/camera_info"
+- ros_topic_name: "depth/camera_info"
+  gz_topic_name: "realsense/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10
@@ -51,8 +51,8 @@
   direction: GZ_TO_ROS
   qos_profile: SENSOR_DATA
 
-- ros_topic_name: "/orca_auv/camera/bottom/image_raw"
-  gz_topic_name: "/orca_auv/camera/bottom/image_raw"
+- ros_topic_name: "camera/bottom/image_raw"
+  gz_topic_name: "camera/bottom/image_raw"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   subscriber_queue: 10
@@ -61,8 +61,8 @@
   direction: GZ_TO_ROS
   qos_profile: 10
 
-- ros_topic_name: "/orca_auv/camera/bottom/camera_info"
-  gz_topic_name: "/orca_auv/camera/bottom/camera_info"
+- ros_topic_name: "camera/bottom/camera_info"
+  gz_topic_name: "camera/bottom/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   subscriber_queue: 10
@@ -71,8 +71,8 @@
   direction: GZ_TO_ROS
   qos_profile: 10
 
-- ros_topic_name: "/orca_auv/sensors/imu"
-  gz_topic_name: "/orca_auv/sensors/imu"
+- ros_topic_name: "sensors/imu"
+  gz_topic_name: "sensors/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   subscriber_queue: 10
