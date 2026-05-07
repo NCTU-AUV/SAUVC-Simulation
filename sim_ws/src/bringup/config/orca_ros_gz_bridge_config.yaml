@@ -59,7 +59,7 @@
   publisher_queue: 10
   lazy: false
   direction: GZ_TO_ROS
-  qos_profile: SENSOR_DATA
+  qos_profile: 10
 
 - ros_topic_name: "/orca_auv/camera/bottom/camera_info"
   gz_topic_name: "/orca_auv/camera/bottom/camera_info"
@@ -69,7 +69,7 @@
   publisher_queue: 10
   lazy: false
   direction: GZ_TO_ROS
-  qos_profile: SENSOR_DATA
+  qos_profile: 10
 
 - ros_topic_name: "/orca_auv/sensors/imu"
   gz_topic_name: "/orca_auv/sensors/imu"
@@ -79,7 +79,7 @@
   publisher_queue: 10
   lazy: false
   direction: GZ_TO_ROS
-  qos_profile: SENSOR_DATA
+  qos_profile: 10
 
 - ros_topic_name: "sensors/altimeter"
   gz_topic_name: "sensors/altimeter"
@@ -89,7 +89,7 @@
   publisher_queue: 10
   lazy: false
   direction: GZ_TO_ROS
-  qos_profile: SENSOR_DATA
+  qos_profile: 10
 
 - ros_topic_name: "thrusters/thruster_0/force_N"
   gz_topic_name: "thrusters/thruster_0/force_N"
