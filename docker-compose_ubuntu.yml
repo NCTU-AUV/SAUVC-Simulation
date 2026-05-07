@@ -9,6 +9,8 @@ services:
     tty: true
 
     gpus: all
+    network_mode: host
+    ipc: host
 
     environment:
       - DISPLAY=${DISPLAY}
@@ -19,9 +21,6 @@ services:
       - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
       - ROS_LOCALHOST_ONLY=${ROS_LOCALHOST_ONLY:-0}
       - RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
-
-    ports:
-      - "9002:9002"
 
     volumes:
       - ./sim_ws:/root/sim_ws

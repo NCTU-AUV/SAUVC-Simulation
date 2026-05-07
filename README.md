@@ -61,6 +61,8 @@
 
     `make -f Makefile_ubuntu launch`
 
+    The Ubuntu compose file uses host networking and host IPC so ROS 2 discovery inside the container can see other nodes on the same host ROS domain.
+
 ## Test Thrustes
 
 Use `ign topic -t /orca_auv/thrusters/thruster_0/force_N -m ignition.msgs.Double -p 'data: 5'`.
