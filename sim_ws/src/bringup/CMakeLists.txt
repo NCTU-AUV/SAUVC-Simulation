@@ -17,6 +17,10 @@ install(DIRECTORY config/
 install(DIRECTORY launch/
         DESTINATION share/${PROJECT_NAME}/launch)
 
+install(PROGRAMS
+        scripts/entity_spawner.py
+        DESTINATION lib/${PROJECT_NAME})
+
 # --- Install non-code assets ---
 install(DIRECTORY models/
         DESTINATION share/${PROJECT_NAME}/models)

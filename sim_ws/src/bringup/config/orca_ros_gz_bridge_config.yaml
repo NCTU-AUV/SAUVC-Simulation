@@ -11,41 +11,85 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
+- ros_topic_name: "color/image_raw"
+  gz_topic_name: "realsense/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "color/camera_info"
+  gz_topic_name: "realsense/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "depth/image_raw"
+  gz_topic_name: "realsense/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: SENSOR_DATA
+
+- ros_topic_name: "depth/camera_info"
+  gz_topic_name: "realsense/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: SENSOR_DATA
+
 - ros_topic_name: "camera/bottom/image_raw"
   gz_topic_name: "camera/bottom/image_raw"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
-  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
-  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
-  lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: 10
+
+- ros_topic_name: "camera/bottom/camera_info"
+  gz_topic_name: "camera/bottom/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: 10
 
 - ros_topic_name: "sensors/imu"
   gz_topic_name: "sensors/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
-  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
-  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
-  lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: 10
 
 - ros_topic_name: "sensors/altimeter"
   gz_topic_name: "sensors/altimeter"
   ros_type_name: "ros_gz_interfaces/msg/Altimeter"
   gz_type_name: "ignition.msgs.Altimeter"
-  subscriber_queue: 10       # Default 10 if qos_profile is empty, otherwise not set by default
-  publisher_queue: 10        # Default 10 if qos_profile is empty, otherwise not set by default
-  lazy: false                # Default "false"
-  direction: GZ_TO_ROS  # Default "BIDIRECTIONAL" - Bridge both directions
-                            # "GZ_TO_ROS" - Bridge Gz topic to ROS
-                            # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  qos_profile: 10           # Default is a default-constructed QoS with appropriate queue size
+  subscriber_queue: 10
+  publisher_queue: 10
+  lazy: false
+  direction: GZ_TO_ROS
+  qos_profile: 10
 
 - ros_topic_name: "thrusters/thruster_0/force_N"
   gz_topic_name: "thrusters/thruster_0/force_N"
