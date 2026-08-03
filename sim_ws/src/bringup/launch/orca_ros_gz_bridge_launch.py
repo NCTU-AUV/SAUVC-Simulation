@@ -6,6 +6,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, Opaq
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -100,7 +101,14 @@ def generate_launch_description():
             package='bringup',
             executable='entity_spawner.py',
             parameters=[
-                {'arena': arena, 'seed': seed},
+                # seed 必須明確指定成字串。entity_spawner 把它宣告成 STRING
+                # （空字串代表「不指定 seed」），但 launch 預設會對
+                # seed:=42 這種輸入做型別推斷、送出 INTEGER，節點會以
+                # InvalidParameterTypeException 直接死掉。
+                {
+                    'arena': ParameterValue(arena, value_type=str),
+                    'seed': ParameterValue(seed, value_type=str),
+                },
             ],
             output='screen',
         ),
