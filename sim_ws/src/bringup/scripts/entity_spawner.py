@@ -1,4 +1,21 @@
 #!/usr/bin/env python3
+"""Populate the running world with a SAUVC arena.
+
+Prop placement follows the 2026 rulebook arena diagrams
+(docs/sim-visual/reference/arena-2026-finals.png and -qualifiers.png), all
+distances measured from the starting wall at x = -12.5:
+
+    starting zone   at the wall
+    orange flare    anywhere 4-8 m out
+    coloured flares anywhere 8-16 m out
+    navigation gate anywhere on the 16 m line
+    target zone     the last ~2 m before the far wall
+
+Randomisation is deliberate: the pinger drum order, prop positions and the
+container shape all vary between attempts in the real competition, so a run
+that only ever sees one layout tells you very little. Pass `seed` to make a
+layout reproducible.
+"""
 
 import math
 import os
@@ -12,6 +29,19 @@ from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
 from ros_gz_interfaces.msg import EntityFactory
 from ros_gz_interfaces.srv import SpawnEntity
+
+# Pool geometry, metres. The floor is the deep section of the 2026 arena.
+POOL_HALF_LENGTH = 12.5
+POOL_HALF_WIDTH = 8.0
+POOL_FLOOR_Z = -1.6
+
+# Distances from the starting wall, per the rulebook arena diagram.
+ORANGE_FLARE_ZONE = (4.0, 8.0)
+COLOUR_FLARE_ZONE = (8.0, 16.0)
+GATE_LINE = 16.0
+TARGET_ZONE_DEPTH = 2.0
+
+DRUM_STYLES = ('drum', 'tub')
 
 
 class EntitySpawner(Node):
@@ -28,6 +58,13 @@ class EntitySpawner(Node):
             '',
             ParameterDescriptor(description='Optional random seed for reproducible prop placement'),
         )
+        self.declare_parameter(
+            'drum_style',
+            'random',
+            ParameterDescriptor(
+                description='Target container shape: drum (round, per rulebook text), '
+                            'tub (rectangular, as in the competition photos), or random'),
+        )
 
         self.arena = self.get_parameter('arena').get_parameter_value().string_value.strip().lower()
         if self.arena not in {'finals', 'qualification'}:
@@ -41,15 +78,27 @@ class EntitySpawner(Node):
         else:
             self.rng.seed()
 
+        style = self.get_parameter('drum_style').get_parameter_value().string_value.strip().lower()
+        if style not in set(DRUM_STYLES) | {'random'}:
+            raise ValueError(f'Unsupported drum style: {style}')
+        self.drum_style = self.rng.choice(DRUM_STYLES) if style == 'random' else style
+
         self.models_path = os.path.join(get_package_share_directory('bringup'), 'models')
-        self.pool_floor_z = -2.2
+        self.pool_floor_z = POOL_FLOOR_Z
         self.world_name = 'water_world'
 
         self.spawn_client = self.create_client(SpawnEntity, f'/world/{self.world_name}/create')
         while not self.spawn_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for /world/water_world/create...')
 
-        self.get_logger().info(f'Spawn service ready, launching {self.arena} arena setup')
+        self.get_logger().info(
+            f'Spawn service ready, launching {self.arena} arena setup '
+            f'(drum style: {self.drum_style})')
+
+    @staticmethod
+    def from_start_wall(distance: float) -> float:
+        """Convert a rulebook distance from the starting wall into a world x."""
+        return -POOL_HALF_LENGTH + distance
 
     def load_model_sdf(self, model_name: str) -> str:
         sdf_path = os.path.join(self.models_path, model_name, 'model.sdf')
@@ -84,15 +133,15 @@ class EntitySpawner(Node):
         self.spawn_model('orca_auv', 'orca_auv', x, y, z, yaw=yaw)
 
     def spawn_qualification(self) -> None:
-        start_line_x = -12.46
-        gate_x = -2.5
+        start_line_x = -POOL_HALF_LENGTH + 0.04
+        gate_x = self.from_start_wall(10.0)
         start_line_ys = (-3.0, 3.0)
 
-        self.spawn_model('qualification_start_line', 'qualification_start_line_1', start_line_x, start_line_ys[0], 0.02, yaw=math.pi / 2.0)
-        self.spawn_model('q_gate', 'qualification_gate_1', gate_x, start_line_ys[0], 0.0, yaw=math.pi / 2.0)
-
-        self.spawn_model('qualification_start_line', 'qualification_start_line_2', start_line_x, start_line_ys[1], 0.02, yaw=math.pi / 2.0)
-        self.spawn_model('q_gate', 'qualification_gate_2', gate_x, start_line_ys[1], 0.0, yaw=math.pi / 2.0)
+        for index, start_y in enumerate(start_line_ys, start=1):
+            self.spawn_model('qualification_start_line', f'qualification_start_line_{index}',
+                             start_line_x, start_y, 0.02, yaw=math.pi / 2.0)
+            # The gate hangs from the surface, so it spawns at z = 0.
+            self.spawn_model('q_gate', f'q_gate_{index}', gate_x, start_y, 0.0, yaw=math.pi / 2.0)
 
         chosen_start_y = self.rng.choice(start_line_ys)
         self.spawn_vehicle(
@@ -104,55 +153,67 @@ class EntitySpawner(Node):
         self.get_logger().info(f'Qualification AUV spawned from starting line at y={chosen_start_y:.2f}')
 
     def spawn_finals(self) -> None:
-        start_zone_x = -11.75
-        start_zone_y = self.rng.uniform(-6.75, 6.75)
-        start_zone_pose = (start_zone_x, start_zone_y, 0.02)
-        gate_x = 3.5
-        gate_y = self.rng.uniform(-6.75, 6.75)
-        orange_x = self.rng.uniform(-8.5, -4.5)
-        orange_y = self.rng.uniform(-7.5, 7.5)
+        lateral_margin = 1.25
+        y_limit = POOL_HALF_WIDTH - lateral_margin
 
-        self.spawn_model('starting_zone', 'starting_zone', *start_zone_pose, yaw=0.0)
-        self.spawn_vehicle(
-            x=start_zone_x,
-            y=start_zone_y,
-            z=-0.4,
-            yaw=0.0,
-        )
-        self.spawn_model('gate', 'navigation_gate', gate_x, gate_y, self.pool_floor_z, yaw=math.pi / 2.0)
-        self.spawn_model('orange_flare', 'orange_flare', orange_x, orange_y, self.pool_floor_z, yaw=0.0)
+        start_zone_x = self.from_start_wall(0.75)
+        start_zone_y = self.rng.uniform(-y_limit, y_limit)
+        gate_x = self.from_start_wall(GATE_LINE)
+        gate_y = self.rng.uniform(-y_limit, y_limit)
+        orange_x = self.from_start_wall(self.rng.uniform(*ORANGE_FLARE_ZONE))
+        orange_y = self.rng.uniform(-y_limit, y_limit)
 
-        drum_positions = [
-            (8.20, -2.10, self.pool_floor_z),
-            (8.20, -0.70, self.pool_floor_z),
-            (8.20, 0.70, self.pool_floor_z),
-            (8.20, 2.10, self.pool_floor_z),
-        ]
-        shuffled_slots = drum_positions[:]
-        self.rng.shuffle(shuffled_slots)
-        self.spawn_model('blue_drum', 'blue_drum', *shuffled_slots[0], yaw=0.0)
-        for index, drum_pose in enumerate(shuffled_slots[1:]):
-            self.spawn_model('red_drum', f'red_drum_{index}', *drum_pose, yaw=0.0)
-        self.get_logger().info(f'Drum order: {shuffled_slots}')
+        self.spawn_model('starting_zone', 'starting_zone', start_zone_x, start_zone_y, 0.02, yaw=0.0)
+        self.spawn_vehicle(x=start_zone_x, y=start_zone_y, z=-0.4, yaw=0.0)
+        self.spawn_model('gate', 'navigation_gate', gate_x, gate_y, self.pool_floor_z,
+                         yaw=math.pi / 2.0)
+        self.spawn_model('orange_flare', 'orange_flare', orange_x, orange_y, self.pool_floor_z,
+                         yaw=self.rng.uniform(-math.pi, math.pi))
 
-        placed_positions = [
-            (gate_x, gate_y),
-            (orange_x, orange_y),
-            *[(x, y) for x, y, _ in drum_positions],
-        ]
+        drum_positions = self.sample_drum_positions()
+        blue_model = 'blue_tub' if self.drum_style == 'tub' else 'blue_drum'
+        red_model = 'red_tub' if self.drum_style == 'tub' else 'red_drum'
 
-        for model_name, entity_name in (
-            ('red_flare', 'red_flare'),
-            ('yellow_flare', 'yellow_flare'),
-            ('blue_flare', 'blue_flare'),
-        ):
+        # Entity names stay shape-independent so downstream tooling (and the
+        # detector's class names) do not care which variant was spawned.
+        self.spawn_model(blue_model, 'blue_drum', *drum_positions[0],
+                         yaw=self.rng.uniform(-0.25, 0.25))
+        for index, drum_pose in enumerate(drum_positions[1:]):
+            self.spawn_model(red_model, f'red_drum_{index}', *drum_pose,
+                             yaw=self.rng.uniform(-0.25, 0.25))
+        self.get_logger().info(
+            f'Target zone: {self.drum_style} shape, blue at {drum_positions[0][:2]}')
+
+        placed_positions = [(gate_x, gate_y), (orange_x, orange_y),
+                            *[(x, y) for x, y, _ in drum_positions]]
+
+        for model_name, entity_name in (('red_flare', 'red_flare'),
+                                        ('yellow_flare', 'yellow_flare'),
+                                        ('blue_flare', 'blue_flare')):
             x, y = self.sample_flare_position(placed_positions)
             placed_positions.append((x, y))
             self.spawn_model(model_name, entity_name, x, y, self.pool_floor_z, yaw=0.0)
 
+    def sample_drum_positions(self):
+        """Four slots in a line across the target zone, in randomised order.
+
+        The target zone is the last ~2 m of the pool; drums sit in a row
+        parallel to the far wall with the blue one anywhere among them.
+        """
+        centre_x = POOL_HALF_LENGTH - TARGET_ZONE_DEPTH / 2.0
+        spacing = self.rng.uniform(1.4, 2.2)
+        offset = self.rng.uniform(-1.0, 1.0)
+        slots = [(centre_x + self.rng.uniform(-0.25, 0.25),
+                  offset + (index - 1.5) * spacing,
+                  self.pool_floor_z)
+                 for index in range(4)]
+        self.rng.shuffle(slots)
+        return slots
+
     def sample_flare_position(self, occupied_xy):
-        x_range = (-4.5, 3.5)
-        y_range = (-7.5, 7.5)
+        x_range = (self.from_start_wall(COLOUR_FLARE_ZONE[0]),
+                   self.from_start_wall(COLOUR_FLARE_ZONE[1]))
+        y_range = (-(POOL_HALF_WIDTH - 0.5), POOL_HALF_WIDTH - 0.5)
         minimum_clearance = 1.25
 
         for _ in range(200):

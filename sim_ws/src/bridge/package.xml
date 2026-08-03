@@ -13,6 +13,9 @@
   <test_depend>python3-pytest</test_depend>
 
   <depend>ros_gz_interfaces</depend>
+  <depend>sensor_msgs</depend>
+  <depend>python3-numpy</depend>
+  <depend>python3-opencv</depend>
 
   <export>
     <build_type>ament_python</build_type>

@@ -1,77 +1,65 @@
 <?xml version="1.0"?>
+<!--
+  Qualification gate, SAUVC 2026 rulebook, qualification arena:
+  "150cm wide spanning from bottom of the pool to the top, hanging from the
+  water surface with orange markings on both port and starboard sides."
+
+  Geometry from the rulebook front view (docs/sim-visual/reference/
+  qualification-gate-2026.jpg): a white float bar riding on the surface with
+  two 4 cm orange poles hanging from it down to the pool floor. The poles were
+  previously 8 cm — twice the real diameter — which made the gate read far
+  heavier than it does in the competition footage.
+
+  Model origin sits at the water surface, centred between the poles; the poles
+  hang downwards from there.
+-->
 <sdf version="1.8">
   <model name="q_gate">
     <static>true</static>
 
+    <!-- White float bar riding on the surface. -->
     <link name="top_bar">
       <pose>0 0 0 0 1.5708 0</pose>
       <visual name="visual">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>1.5</length>
-          </cylinder>
-        </geometry>
+        <geometry><box><size>0.06 0.10 1.54</size></box></geometry>
         <material>
-          <ambient>1 1 1 1</ambient>
-          <diffuse>1 1 1 1</diffuse>
+          <ambient>0.85 0.86 0.87 1</ambient>
+          <diffuse>0.96 0.97 0.98 1</diffuse>
+          <specular>0.15 0.15 0.15 1</specular>
         </material>
       </visual>
       <collision name="collision">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>1.5</length>
-          </cylinder>
-        </geometry>
+        <geometry><box><size>0.06 0.10 1.54</size></box></geometry>
       </collision>
     </link>
 
     <link name="left_post">
-      <pose>-0.75 0 -1.1 0 0 0</pose>
+      <pose>-0.75 0 -0.8 0 0 0</pose>
       <visual name="visual">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
+        <geometry><cylinder><radius>0.02</radius><length>1.6</length></cylinder></geometry>
         <material>
-          <ambient>1 0.55 0 1</ambient>
-          <diffuse>1 0.55 0 1</diffuse>
+          <ambient>0.45 0.20 0.01 1</ambient>
+          <diffuse>0.98 0.48 0.02 1</diffuse>
+          <specular>0.05 0.05 0.05 1</specular>
         </material>
       </visual>
       <collision name="collision">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
+        <geometry><cylinder><radius>0.02</radius><length>1.6</length></cylinder></geometry>
       </collision>
     </link>
 
     <link name="right_post">
-      <pose>0.75 0 -1.1 0 0 0</pose>
+      <pose>0.75 0 -0.8 0 0 0</pose>
       <visual name="visual">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
+        <geometry><cylinder><radius>0.02</radius><length>1.6</length></cylinder></geometry>
         <material>
-          <ambient>1 0.55 0 1</ambient>
-          <diffuse>1 0.55 0 1</diffuse>
+          <ambient>0.45 0.20 0.01 1</ambient>
+          <diffuse>0.98 0.48 0.02 1</diffuse>
+          <specular>0.05 0.05 0.05 1</specular>
         </material>
       </visual>
       <collision name="collision">
-        <geometry>
-          <cylinder>
-            <radius>0.04</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
+        <geometry><cylinder><radius>0.02</radius><length>1.6</length></cylinder></geometry>
       </collision>
     </link>
   </model>

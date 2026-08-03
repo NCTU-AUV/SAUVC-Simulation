@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<!--
+  Target drum (blue), rectangular-tub variant.
+  See red_tub/model.sdf for why both container shapes exist.
+
+  60 x 40 cm footprint, 30 cm deep, open top, slight outward taper.
+  Model origin sits on the pool floor at the tub's centre.
+-->
+<sdf version="1.7">
+  <model name="blue_tub">
+    <static>1</static>
+    <allow_auto_disable>1</allow_auto_disable>
+
+    <link name="link">
+      <inertial>
+        <mass>1</mass>
+        <pose>0 0 0.15 0 0 0</pose>
+        <inertia>
+          <ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>0.04</iyy><iyz>0</iyz>
+          <izz>0.05</izz>
+        </inertia>
+      </inertial>
+
+      <visual name="floor">
+        <pose>0 0 0.015 0 0 0</pose>
+        <geometry><box><size>0.56 0.36 0.03</size></box></geometry>
+        <material>
+          <ambient>0.03 0.08 0.20 1</ambient>
+          <diffuse>0.09 0.30 0.68 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+
+      <visual name="wall_x_pos">
+        <pose>0.29 0 0.15 0 -0.06 0</pose>
+        <geometry><box><size>0.02 0.40 0.30</size></box></geometry>
+        <material>
+          <ambient>0.03 0.09 0.22 1</ambient>
+          <diffuse>0.10 0.34 0.74 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+      <visual name="wall_x_neg">
+        <pose>-0.29 0 0.15 0 0.06 0</pose>
+        <geometry><box><size>0.02 0.40 0.30</size></box></geometry>
+        <material>
+          <ambient>0.03 0.09 0.22 1</ambient>
+          <diffuse>0.10 0.34 0.74 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+      <visual name="wall_y_pos">
+        <pose>0 0.19 0.15 0.06 0 0</pose>
+        <geometry><box><size>0.60 0.02 0.30</size></box></geometry>
+        <material>
+          <ambient>0.03 0.09 0.22 1</ambient>
+          <diffuse>0.10 0.34 0.74 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+      <visual name="wall_y_neg">
+        <pose>0 -0.19 0.15 -0.06 0 0</pose>
+        <geometry><box><size>0.60 0.02 0.30</size></box></geometry>
+        <material>
+          <ambient>0.03 0.09 0.22 1</ambient>
+          <diffuse>0.10 0.34 0.74 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+
+      <!--
+        Moulded rim, a shade darker like the real tubs. Four bars rather
+        than one slab: the tub is open at the top — the AUV has to drop a
+        ball into it — and a solid lid would both look wrong and hide the
+        dark interior, which is most of what the container looks like from
+        a shallow approach angle.
+      -->
+      <visual name="rim_x_pos">
+        <pose>0.31 0 0.305 0 0 0</pose>
+        <geometry><box><size>0.04 0.44 0.02</size></box></geometry>
+        <material>
+          <ambient>0.02 0.06 0.15 1</ambient>
+          <diffuse>0.07 0.22 0.50 1</diffuse>
+          <specular>0.06 0.06 0.06 1</specular>
+        </material>
+      </visual>
+      <visual name="rim_x_neg">
+        <pose>-0.31 0 0.305 0 0 0</pose>
+        <geometry><box><size>0.04 0.44 0.02</size></box></geometry>
+        <material>
+          <ambient>0.02 0.06 0.15 1</ambient>
+          <diffuse>0.07 0.22 0.50 1</diffuse>
+          <specular>0.06 0.06 0.06 1</specular>
+        </material>
+      </visual>
+      <visual name="rim_y_pos">
+        <pose>0 0.21 0.305 0 0 0</pose>
+        <geometry><box><size>0.66 0.04 0.02</size></box></geometry>
+        <material>
+          <ambient>0.02 0.06 0.15 1</ambient>
+          <diffuse>0.07 0.22 0.50 1</diffuse>
+          <specular>0.06 0.06 0.06 1</specular>
+        </material>
+      </visual>
+      <visual name="rim_y_neg">
+        <pose>0 -0.21 0.305 0 0 0</pose>
+        <geometry><box><size>0.66 0.04 0.02</size></box></geometry>
+        <material>
+          <ambient>0.02 0.06 0.15 1</ambient>
+          <diffuse>0.07 0.22 0.50 1</diffuse>
+          <specular>0.06 0.06 0.06 1</specular>
+        </material>
+      </visual>
+
+      <collision name="floor_collision">
+        <pose>0 0 0.015 0 0 0</pose>
+        <geometry><box><size>0.60 0.40 0.03</size></box></geometry>
+      </collision>
+      <collision name="wall_x_pos_collision">
+        <pose>0.29 0 0.15 0 0 0</pose>
+        <geometry><box><size>0.03 0.40 0.30</size></box></geometry>
+      </collision>
+      <collision name="wall_x_neg_collision">
+        <pose>-0.29 0 0.15 0 0 0</pose>
+        <geometry><box><size>0.03 0.40 0.30</size></box></geometry>
+      </collision>
+      <collision name="wall_y_pos_collision">
+        <pose>0 0.19 0.15 0 0 0</pose>
+        <geometry><box><size>0.60 0.03 0.30</size></box></geometry>
+      </collision>
+      <collision name="wall_y_neg_collision">
+        <pose>0 -0.19 0.15 0 0 0</pose>
+        <geometry><box><size>0.60 0.03 0.30</size></box></geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
