@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'altimeter_to_pressure_sensor_node = bridge.altimeter_to_pressure_sensor_node:main',
+            'underwater_camera_node = bridge.underwater_camera_node:main',
         ],
     },
 )

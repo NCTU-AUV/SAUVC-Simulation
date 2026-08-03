@@ -46,6 +46,8 @@ def generate_launch_description():
     namespace = LaunchConfiguration('namespace')
     arena = LaunchConfiguration('arena')
     seed = LaunchConfiguration('seed')
+    randomize_water = LaunchConfiguration('randomize_water')
+    drum_style = LaunchConfiguration('drum_style')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -72,6 +74,18 @@ def generate_launch_description():
             'seed',
             default_value='',
             description='Optional random seed for deterministic prop placement',
+        ),
+        DeclareLaunchArgument(
+            'drum_style',
+            default_value='random',
+            description='Target container shape: drum (round, per the rulebook text), '
+                        'tub (rectangular, as in the competition photos), or random',
+        ),
+        DeclareLaunchArgument(
+            'randomize_water',
+            default_value='false',
+            description='Vary water clarity, colour and exposure over time in '
+                        'underwater_camera_node instead of holding one condition',
         ),
         OpaqueFunction(function=gz_sim_launch),
         Node(
@@ -108,6 +122,7 @@ def generate_launch_description():
                 {
                     'arena': ParameterValue(arena, value_type=str),
                     'seed': ParameterValue(seed, value_type=str),
+                    'drum_style': ParameterValue(drum_style, value_type=str),
                 },
             ],
             output='screen',
@@ -116,5 +131,14 @@ def generate_launch_description():
             package='bridge',
             executable='altimeter_to_pressure_sensor_node',
             namespace=namespace,
+        ),
+        Node(
+            package='bridge',
+            executable='underwater_camera_node',
+            namespace=namespace,
+            parameters=[{
+                'randomize': ParameterValue(randomize_water, value_type=bool),
+            }],
+            output='screen',
         ),
     ])

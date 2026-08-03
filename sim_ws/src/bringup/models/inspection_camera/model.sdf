@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+  A bodiless, static RGB-D camera used to capture reference views of the arena.
+
+  Optics mirror the AUV's RealSense colour stream (see orca_auv/model.sdf) so
+  that whatever this camera sees is what the perception pipeline would see from
+  the same pose. It carries no collision or inertia and never participates in
+  physics, so it can be teleported anywhere without disturbing the scene.
+
+  It is RGB-D rather than plain RGB because capture_view.py runs the same
+  WaterColumn model the simulation does over colour+depth — a reference shot
+  has to show the wet image the detector receives, not the dry render.
+-->
+<sdf version="1.8">
+  <model name="inspection_camera">
+    <static>true</static>
+    <link name="link">
+      <sensor name="cam" type="rgbd_camera">
+        <pose>0 0 0 0 0 0</pose>
+        <topic>inspection</topic>
+        <camera>
+          <horizontal_fov>1.211</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <depth_camera>
+            <output>depths</output>
+          </depth_camera>
+          <clip>
+            <near>0.05</near>
+            <far>40</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+      </sensor>
+    </link>
+  </model>
+</sdf>

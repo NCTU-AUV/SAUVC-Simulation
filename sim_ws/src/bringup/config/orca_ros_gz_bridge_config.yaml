@@ -11,7 +11,12 @@
 #                             # "ROS_TO_GZ" - Bridge ROS topic to Gz
 #   qos_profile: SENSOR_DATA  # Default is a default-constructed QoS with appropriate queue size
 
-- ros_topic_name: "color/image_raw"
+# The raw Gazebo render lands on `color/image_raw_dry`, not `color/image_raw`.
+# underwater_camera_node consumes it, applies the water image-formation model
+# using the aligned depth frame, and republishes the result as
+# `color/image_raw` — so the perception stack keeps subscribing to exactly the
+# topic it does on the real vehicle and never sees the dry render.
+- ros_topic_name: "color/image_raw_dry"
   gz_topic_name: "realsense/image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"

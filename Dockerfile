@@ -40,6 +40,8 @@ RUN apt-get update && apt-get install -y \
         ros-humble-ros-gz-bridge \
         ros-humble-ros-gz-interfaces \
         ros-humble-ros-gz-sim \
+        python3-numpy \
+        python3-opencv \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/

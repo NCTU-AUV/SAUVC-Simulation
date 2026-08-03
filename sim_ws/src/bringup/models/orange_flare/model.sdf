@@ -1,107 +1,87 @@
-<?xml version='1.0'?>
-<sdf version='1.7'>
-  <model name='orange_flare'>
-    <link name='link_1'>
-      <inertial>
-        <mass>0.0123911</mass>
-        <inertia>
-          <ixx>0.00104219</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.00104219</iyy>
-          <iyz>0</iyz>
-          <izz>1.919e-05</izz>
-        </inertia>
-        <pose>0 0 0 0 -0 0</pose>
-      </inertial>
-      <pose>0 0 1.1 0 -0 0</pose>
-      <gravity>1</gravity>
-      <self_collide>0</self_collide>
-      <kinematic>0</kinematic>
-      <enable_wind>0</enable_wind>
-      <visual name='visual'>
-        <pose>0 0 0 0 -0 0</pose>
-        <geometry>
-          <cylinder>
-            <radius>0.075</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
-        <material>
-          <lighting>1</lighting>
-          <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/Grey</name>
-          </script>
-          <shader type='pixel'>
-            <normal_map>__default__</normal_map>
-          </shader>
-          <ambient>1 0.4 0 1</ambient>
-          <diffuse>1 0.4 0 1</diffuse>
-          <specular>0.01 0.01 0.01 1</specular>
-          <emissive>0 0 0 1</emissive>
-        </material>
-        <transparency>0</transparency>
-        <cast_shadows>1</cast_shadows>
-      </visual>
-      <collision name='collision'>
-        <laser_retro>0</laser_retro>
-        <max_contacts>10</max_contacts>
-        <pose>0 0 0 0 -0 0</pose>
-        <geometry>
-          <cylinder>
-            <radius>0.075</radius>
-            <length>2.2</length>
-          </cylinder>
-        </geometry>
-        <surface>
-          <friction>
-            <ode>
-              <mu>1</mu>
-              <mu2>1</mu2>
-              <fdir1>0 0 0</fdir1>
-              <slip1>0</slip1>
-              <slip2>0</slip2>
-            </ode>
-            <torsional>
-              <coefficient>1</coefficient>
-              <patch_radius>0</patch_radius>
-              <surface_radius>0</surface_radius>
-              <use_patch_radius>1</use_patch_radius>
-              <ode>
-                <slip>0</slip>
-              </ode>
-            </torsional>
-          </friction>
-          <bounce>
-            <restitution_coefficient>0</restitution_coefficient>
-            <threshold>1e+06</threshold>
-          </bounce>
-          <contact>
-            <collide_without_contact>0</collide_without_contact>
-            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
-            <collide_bitmask>1</collide_bitmask>
-            <ode>
-              <soft_cfm>0</soft_cfm>
-              <soft_erp>0.2</soft_erp>
-              <kp>1e+13</kp>
-              <kd>1</kd>
-              <max_vel>0.01</max_vel>
-              <min_depth>0</min_depth>
-            </ode>
-            <bullet>
-              <split_impulse>1</split_impulse>
-              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
-              <soft_cfm>0</soft_cfm>
-              <soft_erp>0.2</soft_erp>
-              <kp>1e+13</kp>
-              <kd>1</kd>
-            </bullet>
-          </contact>
-        </surface>
-      </collision>
-    </link>
+<?xml version="1.0"?>
+<!--
+  Orange flare, SAUVC 2026 rulebook, task 1:
+  "~15cm diameter flare with height spanning from bottom to top of the pool,
+  and orange in color."
+
+  In the competition photographs (docs/sim-visual/reference/
+  orange-flare-2022.jpg) this prop is an inflatable orange marker buoy tethered
+  to a black weight plate on the floor — a flat ~15 cm wide blade, not the
+  round column the previous model used. The blade profile matters: seen from
+  the side it is a wide orange bar, seen edge-on it nearly disappears, and the
+  detector was trained on both.
+
+  Model origin sits on the pool floor. Static: any contact with this prop
+  aborts the attempt, so it must never be nudged out of place.
+-->
+<sdf version="1.7">
+  <model name="orange_flare">
     <static>1</static>
     <allow_auto_disable>1</allow_auto_disable>
+
+    <link name="link_1">
+      <inertial>
+        <mass>2.0</mass>
+        <pose>0 0 0.10 0 0 0</pose>
+        <inertia>
+          <ixx>0.05</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>0.05</iyy><iyz>0</iyz>
+          <izz>0.01</izz>
+        </inertia>
+      </inertial>
+
+      <!-- Dive weight anchoring the buoy. -->
+      <visual name="weight">
+        <pose>0 0 0.02 0 0 0</pose>
+        <geometry><cylinder><radius>0.11</radius><length>0.04</length></cylinder></geometry>
+        <material>
+          <ambient>0.03 0.03 0.03 1</ambient>
+          <diffuse>0.09 0.09 0.09 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+
+      <!--
+        Inflatable blade, floor to just under the surface.
+
+        Safety orange, weighted well to the red side. Water strips red far
+        faster than green, so a "balanced" orange arrives at the camera as
+        olive-yellow: at 3 m the previous 0.97/0.42/0.03 landed on RGB
+        (105, 111, 42), which the detector read as a yellow flare. Sampling
+        the real prop in docs/sim-visual/reference/orange-flare-2022.jpg gives
+        (135, 90, 79) at similar range — red clearly ahead of green — and that
+        is what this albedo reproduces once the water is applied.
+      -->
+      <visual name="blade">
+        <pose>0 0 0.79 0 0 0</pose>
+        <geometry><box><size>0.15 0.07 1.50</size></box></geometry>
+        <material>
+          <ambient>0.50 0.13 0.02 1</ambient>
+          <diffuse>1.00 0.26 0.05 1</diffuse>
+          <specular>0.06 0.06 0.06 1</specular>
+        </material>
+      </visual>
+
+      <!-- Dark sealed cuff at the bottom of the buoy. -->
+      <visual name="cuff">
+        <pose>0 0 0.09 0 0 0</pose>
+        <geometry><box><size>0.15 0.075 0.10</size></box></geometry>
+        <material>
+          <ambient>0.03 0.03 0.03 1</ambient>
+          <diffuse>0.10 0.10 0.10 1</diffuse>
+          <specular>0.04 0.04 0.04 1</specular>
+        </material>
+      </visual>
+
+      <collision name="weight_collision">
+        <pose>0 0 0.02 0 0 0</pose>
+        <geometry><cylinder><radius>0.11</radius><length>0.04</length></cylinder></geometry>
+      </collision>
+
+      <collision name="blade_collision">
+        <pose>0 0 0.79 0 0 0</pose>
+        <geometry><box><size>0.15 0.07 1.50</size></box></geometry>
+      </collision>
+    </link>
   </model>
 </sdf>

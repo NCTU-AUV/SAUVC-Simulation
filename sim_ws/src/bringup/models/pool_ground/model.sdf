@@ -1,4 +1,12 @@
 <?xml version="1.0" ?>
+<!--
+  Pool floor, 25 x 16 m.
+
+  Gazebo maps a <plane>'s UVs 0..1 across its full extent, so the albedo map is
+  a single bake of the entire floor rather than a repeating swatch. That is
+  what lets the competition lane lines and end T-markers sit at their true
+  metric positions — see scripts/make_pool_textures.py, which produces it.
+-->
 <sdf version="1.8">
   <model name="pool_ground">
     <static>true</static>
@@ -31,14 +39,15 @@
           </plane>
         </geometry>
         <material>
-          <!-- Direct texture approach -->
-          <ambient>0.7 0.8 0.9 1</ambient>
-          <diffuse>0.7 0.8 0.9 1</diffuse>
-          <specular>0.3 0.3 0.3 1</specular>
+          <ambient>0.55 0.60 0.63 1</ambient>
+          <diffuse>1.0 1.0 1.0 1</diffuse>
+          <specular>0.08 0.08 0.08 1</specular>
           <emissive>0 0 0 1</emissive>
           <pbr>
             <metal>
-              <albedo_map>model://pool_ground/materials/textures/pool_bottom_tiles_mosaic.png</albedo_map>
+              <albedo_map>model://pool_ground/materials/textures/pool_floor_competition.png</albedo_map>
+              <metalness>0.0</metalness>
+              <roughness>0.55</roughness>
             </metal>
           </pbr>
         </material>

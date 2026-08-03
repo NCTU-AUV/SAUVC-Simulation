@@ -19,6 +19,8 @@ install(DIRECTORY launch/
 
 install(PROGRAMS
         scripts/entity_spawner.py
+        scripts/capture_view.py
+        scripts/generate_dataset.py
         DESTINATION lib/${PROJECT_NAME})
 
 # --- Install non-code assets ---
