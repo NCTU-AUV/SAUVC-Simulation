@@ -51,11 +51,7 @@ compose_shell:
 init: compose_up
 	$(ROS_NET_ENV) $(COMPOSE_CMD) exec $(ROS_EXEC_ENV) orca /bin/bash -lc "\
 		source /opt/ros/humble/setup.bash; \
-		rm -rf /var/lib/apt/lists/*; \
-		apt-get clean; \
-		apt-get update; \
 		cd $(WORKSPACE) && \
-		rosdep install --from-paths src --ignore-src -y && \
 		colcon build --symlink-install && \
 		echo \"source /root/$(WORKSPACE)/install/setup.bash\" >> /etc/bash.bashrc"
 
