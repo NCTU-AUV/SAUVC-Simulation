@@ -31,6 +31,7 @@ Two things keep the labels honest rather than merely correct:
 """
 
 import argparse
+import json
 import math
 import os
 import random
@@ -60,7 +61,11 @@ QUALIFICATION_CLASS_NAMES = ['gate']
 # are the same numbers the SDF geometry is built from.
 PROP_EXTENTS = {
     'gate': (0.79, 0.58, 0.0, 1.02),
-    'orange_flare': (0.11, 0.11, 0.0, 1.54),
+    # 0.11 是底部配重盤的半徑，但配重盤只佔最下面 4 cm；可見的 1.50 m 葉片
+    # 只有 0.15 x 0.07。用配重盤的半徑當半extent，側視時標註框會是葉片的
+    # 三倍寬（3 m 處葉片約 11 px、框卻有 34 px），三分之二是背景水體。
+    # 取葉片的半extent，代價是最下面 4 cm 的配重盤稍微被切掉。
+    'orange_flare': (0.075, 0.0375, 0.0, 1.54),
     'red_flare': (0.07, 0.07, 0.0, 0.873),
     'yellow_flare': (0.07, 0.07, 0.0, 0.873),
     'blue_flare': (0.07, 0.07, 0.0, 0.873),
@@ -72,6 +77,25 @@ PROP_EXTENTS = {
     # rather than the top of the float bar — from any underwater viewpoint the
     # bar is behind the surface plane and contributes no visible pixels.
     'q_gate': (0.77, 0.05, -1.6, 0.0),
+    # 方形塑膠箱：外緣 0.66 x 0.44、高到鑲邊的 0.315。與圓桶差很多，但生成時
+    # 的實體名稱一模一樣（都叫 blue_drum / red_drum），只能靠 manifest 分辨。
+    'blue_tub': (0.33, 0.22, 0.0, 0.315),
+    'red_tub': (0.33, 0.22, 0.0, 0.315),
+}
+
+# 實際生成的模型名稱 -> extents key。實體名稱刻意與外形無關，所以真實外形
+# 要以 entity_spawner 寫出的 manifest 為準；沒有 manifest 才退回名稱前綴。
+MODEL_EXTENTS = {
+    'gate': 'gate',
+    'q_gate': 'q_gate',
+    'orange_flare': 'orange_flare',
+    'red_flare': 'red_flare',
+    'yellow_flare': 'yellow_flare',
+    'blue_flare': 'blue_flare',
+    'blue_drum': 'blue_drum',
+    'red_drum': 'red_drum',
+    'blue_tub': 'blue_tub',
+    'red_tub': 'red_tub',
 }
 
 # Entity name prefix -> (class name, extents key). Entity names are shape
@@ -108,10 +132,22 @@ MIN_CONTRAST = 0.022  # mean |box - surround| below this means it is lost in haz
 BOX_EDGES = [(i, i ^ bit) for i in range(8) for bit in (1, 2, 4) if i < (i ^ bit)]
 
 
-def classify(entity_name, entity_classes):
+def load_manifest(path=None):
+    """entity_spawner 寫出的「實體 -> 實際模型」對應，讀不到就回空的。"""
+    path = path or os.environ.get('ORCA_ARENA_MANIFEST',
+                                  '/tmp/orca_arena_manifest.json')
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            return json.load(file).get('entities', {})
+    except (OSError, ValueError):
+        return {}
+
+
+def classify(entity_name, entity_classes, manifest=None):
     for prefix, class_name, extents_key in entity_classes:
         if entity_name.startswith(prefix):
-            return class_name, PROP_EXTENTS[extents_key]
+            model = (manifest or {}).get(entity_name)
+            return class_name, PROP_EXTENTS[MODEL_EXTENTS.get(model, extents_key)]
     return None, None
 
 
@@ -197,6 +233,26 @@ def occluded(box, distance_map, prop_distance):
     return float(np.percentile(patch, 5)) < prop_distance - 0.6
 
 
+def interior_contrast(patch):
+    """框佔滿畫面時的退路：拿中心區與框自己的外緣比。
+
+    這時已經沒有背景可比，但「物體本身還有沒有結構可辨」同樣能回答
+    「相機到底看不看得見它」。
+    """
+    height, width = patch.shape[:2]
+    if height < 4 or width < 4:
+        return 0.0
+    core = patch[height // 4:height - height // 4,
+                 width // 4:width - width // 4]
+    if core.size == 0 or core.size >= patch.size:
+        return 0.0
+    total = patch.reshape(-1, 3).sum(axis=0) - core.reshape(-1, 3).sum(axis=0)
+    border_mean = total / float(patch.shape[0] * patch.shape[1]
+                                - core.shape[0] * core.shape[1])
+    return float(np.abs(core.reshape(-1, 3).mean(axis=0)
+                        - border_mean).mean()) / 255.0
+
+
 def contrast(image, box):
     """Mean per-channel difference between the box and the ring around it.
 
@@ -216,7 +272,10 @@ def contrast(image, box):
     ox1, oy1 = min(x1 + pad, width - 1), min(y1 + pad, height - 1)
     outer = image[oy0:oy1 + 1, ox0:ox1 + 1]
     if outer.size <= inner.size:
-        return 0.0
+        # 框已經佔滿畫面，外圈無處可長。回傳 0.0 會讓標註被跳過而圖片照寫，
+        # 等於把最有價值的近距離特寫變成「滿版紅桶標記為背景」的硬負樣本 ——
+        # 正好是近平面裁切機制想保留的那一批。改成量框內部的對比。
+        return interior_contrast(inner)
 
     total = outer.reshape(-1, 3).sum(axis=0) - inner.reshape(-1, 3).sum(axis=0)
     ring_mean = total / float(outer.shape[0] * outer.shape[1] - inner.shape[0] * inner.shape[1])
@@ -266,8 +325,13 @@ def main() -> int:
         node.ensure_camera()
         time.sleep(1.5)
 
+        manifest = load_manifest()
+        if not manifest:
+            node.get_logger().warning(
+                'No arena manifest found; falling back to entity names for prop '
+                'shapes. Tub-shaped drums will be labelled with drum extents.')
         poses = model_poses()
-        props = [(name, *classify(name, entity_classes)) for name in poses]
+        props = [(name, *classify(name, entity_classes, manifest)) for name in poses]
         props = [(name, cls, ext) for name, cls, ext in props if cls]
         if not props:
             other = ', '.join(p for p in sorted(PROFILES) if p != args.profile)
@@ -317,8 +381,12 @@ def main() -> int:
                 if box is None:
                     continue
 
+                # 用最近的角而不是中位數。與框內「最近」的算繪深度比較時，
+                # 拿中位數當基準會讓任何本身厚度超過 1.2 m 的道具遮住自己：
+                # 閘門的地面半對角線是 0.98 m，偏離正面約 40 度以上時近端
+                # 立柱就會觸發這個判定，標註被丟掉而圖片照寫。
                 in_front = corners_cam[corners_cam[:, 2] > NEAR_PLANE_M]
-                prop_distance = float(np.median(in_front[:, 2])) if len(in_front) else NEAR_PLANE_M
+                prop_distance = float(np.min(in_front[:, 2])) if len(in_front) else NEAR_PLANE_M
                 if occluded(box, distance_map, prop_distance):
                     continue
                 if contrast(image, box) < MIN_CONTRAST:
