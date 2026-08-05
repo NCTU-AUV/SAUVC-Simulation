@@ -82,7 +82,20 @@ class EntitySpawner(Node):
         style = self.get_parameter('drum_style').get_parameter_value().string_value.strip().lower()
         if style not in set(DRUM_STYLES) | {'random'}:
             raise ValueError(f'Unsupported drum style: {style}')
-        self.drum_style = self.rng.choice(DRUM_STYLES) if style == 'random' else style
+        # 用獨立的 Random 抽形狀，不要動 self.rng。從 self.rng 抽會消耗一次
+        # 抽樣，把後面所有佈局抽樣平移一格 —— 於是同一個 SEED 在
+        # DRUM_STYLE=random 與 DRUM_STYLE=drum 之下產生**不同的場地**，即使
+        # 兩者解析出來的形狀一樣。實測 seed 42：random 得到
+        # [-4.3, -2.3, -2.714, ...]，drum 得到 [0.615, -4.3, -2.3, ...]。
+        # 這會讓 docs/HANDOFF.md §6 的過門軌跡（走預設 random）與
+        # docs/SIM_VISUAL_FIDELITY.md §6 的偵測基準（DRUM_STYLE=drum）
+        # 明明都寫 seed=42，卻不是同一個場地。
+        if style == 'random':
+            style_rng = random.Random()
+            style_rng.seed(int(seed_text) if seed_text else None)
+            self.drum_style = style_rng.choice(DRUM_STYLES)
+        else:
+            self.drum_style = style
         self._spawned: dict[str, str] = {}
 
         self.models_path = os.path.join(get_package_share_directory('bringup'), 'models')

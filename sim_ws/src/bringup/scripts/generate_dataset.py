@@ -66,9 +66,16 @@ PROP_EXTENTS = {
     # 三倍寬（3 m 處葉片約 11 px、框卻有 34 px），三分之二是背景水體。
     # 取葉片的半extent，代價是最下面 4 cm 的配重盤稍微被切掉。
     'orange_flare': (0.075, 0.0375, 0.0, 1.54),
-    'red_flare': (0.07, 0.07, 0.0, 0.873),
-    'yellow_flare': (0.07, 0.07, 0.0, 0.873),
-    'blue_flare': (0.07, 0.07, 0.0, 0.873),
+    # 0.07 是底座半徑，而底座只佔 0.873 m 高度裡的最下面 3 cm（3.4%）；
+    # 其上是半徑 0.008 的柱子（0.80 m）與半徑 0.0215 的白球。用底座半徑當
+    # 半extent，框會比白球寬 3.26 倍、比柱子寬 8.75 倍 —— 2 m 處框是
+    # 32 x 202 px 而輪廓只填滿 15%，與緊框的 IoU 只有 0.31。這與上面
+    # orange_flare 剛修掉的是同一個缺陷，只是漏了這三個。
+    # 取白球半徑：白球是實際可偵測的特徵（見 SIM_VISUAL_FIDELITY.md §2），
+    # 代價是最下面 3 cm 的底座稍微被切掉。
+    'red_flare': (0.0215, 0.0215, 0.0, 0.873),
+    'yellow_flare': (0.0215, 0.0215, 0.0, 0.873),
+    'blue_flare': (0.0215, 0.0215, 0.0, 0.873),
     'red_drum': (0.30, 0.30, 0.0, 0.30),
     'blue_drum': (0.30, 0.30, 0.0, 0.30),
     # The qualification gate hangs from the surface, so its origin sits at
@@ -132,15 +139,30 @@ MIN_CONTRAST = 0.022  # mean |box - surround| below this means it is lost in haz
 BOX_EDGES = [(i, i ^ bit) for i in range(8) for bit in (1, 2, 4) if i < (i ^ bit)]
 
 
-def load_manifest(path=None):
-    """entity_spawner 寫出的「實體 -> 實際模型」對應，讀不到就回空的。"""
+def load_manifest(profile, path=None):
+    """entity_spawner 寫出的「實體 -> 實際模型」對應，讀不到就回空的。
+
+    要驗證 arena 欄位。寫入端一直有記 arena 與 drum_style，讀取端卻只取
+    entities 就丟掉 —— 於是上一輪留下的陳舊 manifest 與當前的完全無法區分，
+    而「找不到 manifest」的警告只在檔案不存在時觸發。實體名稱每次都一樣
+    （blue_drum、red_drum_0…），所以套錯尺寸不會有任何地方發現：圓桶是
+    0.60x0.60、方形箱是 0.66x0.44，差很多。
+
+    manifest 只在 spawn_all() 完全成功之後才寫，中途失敗會留下上一輪的檔案，
+    而 sim 容器的 /tmp 跨 make sim 是持續存在的（沒有 tmpfs、STOP_SIM 也不清）。
+    """
     path = path or os.environ.get('ORCA_ARENA_MANIFEST',
                                   '/tmp/orca_arena_manifest.json')
     try:
         with open(path, 'r', encoding='utf-8') as file:
-            return json.load(file).get('entities', {})
+            payload = json.load(file)
     except (OSError, ValueError):
-        return {}
+        return {}, None
+    arena = payload.get('arena')
+    if arena != profile:
+        return {}, (f'manifest 的 arena 是 {arena!r}，與 --profile {profile} 不符 —— '
+                    f'這是上一輪跑動留下的舊檔（{path}）。忽略它。')
+    return payload.get('entities', {}), None
 
 
 def classify(entity_name, entity_classes, manifest=None):
@@ -325,7 +347,9 @@ def main() -> int:
         node.ensure_camera()
         time.sleep(1.5)
 
-        manifest = load_manifest()
+        manifest, stale = load_manifest(args.profile)
+        if stale:
+            node.get_logger().warning(stale)
         if not manifest:
             node.get_logger().warning(
                 'No arena manifest found; falling back to entity names for prop '
