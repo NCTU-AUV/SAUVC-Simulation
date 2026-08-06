@@ -34,7 +34,7 @@ import cv2
 import numpy as np
 import rclpy
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
+from rclpy.qos import HistoryPolicy, QoSProfile, ReliabilityPolicy, qos_profile_sensor_data
 from sensor_msgs.msg import Image
 
 # Attenuation coefficients (1/m) and veiling light for clear chlorinated pool
@@ -222,8 +222,24 @@ class UnderwaterCamera(Node):
             self.create_timer(period, self._roll_water)
             self.get_logger().info(f'Domain randomisation on, re-rolling every {period:.0f}s')
 
+        # Reliable, depth 1 — not qos_profile_sensor_data.
+        #
+        # A best-effort *publisher* cannot be matched by a reliable subscriber,
+        # and web_video_server subscribes reliably with no way to override it
+        # (its only QoS parameters are for parameter_events). The result was a
+        # camera stream that opened, sent the multipart boundary, and then
+        # delivered nothing at all — for the front camera only, because every
+        # other image publisher in the stack is already reliable.
+        #
+        # Nothing is lost by offering the stronger policy: a reliable offer
+        # still satisfies best-effort subscribers, which is how the perception
+        # pipeline reads this topic, and KEEP_LAST depth 1 keeps overwriting
+        # rather than queueing, so a slow consumer still just misses frames.
         self.publisher = self.create_publisher(
-            Image, self.get_parameter('output_image_topic').value, qos_profile_sensor_data)
+            Image, self.get_parameter('output_image_topic').value,
+            QoSProfile(depth=1,
+                       reliability=ReliabilityPolicy.RELIABLE,
+                       history=HistoryPolicy.KEEP_LAST))
         self.create_subscription(
             Image, self.get_parameter('input_depth_topic').value,
             self._on_depth, qos_profile_sensor_data)
