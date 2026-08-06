@@ -18,19 +18,21 @@ make sim ARENA=finals SEED=2
 ## 這個 repo 提供什麼
 
 ```text
-  ┌─ Gazebo Fortress（水下世界）────────────────────────────┐
-  │                                                          │
-  │  water_world.sdf ── entity_spawner ──► 場地道具（隨機佈局）│
-  │                                                          │
-  │  orca_auv 模型：8 推進器 + IMU + altimeter + 前/底相機    │
-  └────────────────┬─────────────────────────────────────────┘
-                   │ ign topic
-          ┌────────▼─────────┐
-          │ parameter_bridge │  感測器、推進器力
-          └────────┬─────────┘
-                   │
-      color/image_raw_dry ──► underwater_camera ──► color/image_raw
-                                （衰減、散射、白平衡、雜訊）
++-------------------------------------------------------------------------+
+| Gazebo Fortress  (underwater world)                                     |
+|                                                                         |
+|   water_world.sdf --> entity_spawner --> arena props (randomised layout)|
+|                                                                         |
+|   orca_auv model: 8 thrusters + IMU + altimeter + front/bottom cameras  |
++-------------------------------------------------------------------------+
+                |  ign topic
+          +--------------------+
+          | parameter_bridge   |  sensors, thruster forces
+          +--------------------+
+                |
+      color/image_raw_dry --> underwater_camera --> color/image_raw
+                                      (attenuation, scattering,
+                                       white balance, noise)
 ```
 
 | 目錄 | 內容 |
