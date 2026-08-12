@@ -115,7 +115,14 @@
         <update_rate>100</update_rate>
         <visualize>true</visualize>
         <topic>/orca_auv/sensors/imu</topic>
-        <pose>0 0 0 0 3.1415926536 0</pose>
+        <!-- 整個堆疊用「往下為正」的機體座標（見 depth_control 的
+             output_sink_force_to_output_wrench_node：世界下沉方向是 +z），
+             所以感測器要從 Gazebo 的 z-up 翻過來。正確的翻法是繞 x 轉 180°
+             （roll）：x 不變、y 與 z 反向。
+             原本寫的是繞 y 轉 180°（pitch），z 一樣會反向所以靜止時讀數看起來
+             對，但它同時把 x 也反了 —— 實測給 +Fx 20 N 時載具往 +x 前進，
+             IMU 的 linear_acceleration.x 卻是負的。 -->
+        <pose>0 0 0 3.1415926536 0 0</pose>
 
         <plugin filename="libignition-gazebo-imu-system.so"
                 name="ignition::gazebo::systems::Imu">

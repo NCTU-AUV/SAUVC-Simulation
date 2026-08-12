@@ -17,6 +17,7 @@ that only ever sees one layout tells you very little. Pass `seed` to make a
 layout reproducible.
 """
 
+import json
 import math
 import os
 import random
@@ -81,7 +82,21 @@ class EntitySpawner(Node):
         style = self.get_parameter('drum_style').get_parameter_value().string_value.strip().lower()
         if style not in set(DRUM_STYLES) | {'random'}:
             raise ValueError(f'Unsupported drum style: {style}')
-        self.drum_style = self.rng.choice(DRUM_STYLES) if style == 'random' else style
+        # 用獨立的 Random 抽形狀，不要動 self.rng。從 self.rng 抽會消耗一次
+        # 抽樣，把後面所有佈局抽樣平移一格 —— 於是同一個 SEED 在
+        # DRUM_STYLE=random 與 DRUM_STYLE=drum 之下產生**不同的場地**，即使
+        # 兩者解析出來的形狀一樣。實測 seed 42：random 得到
+        # [-4.3, -2.3, -2.714, ...]，drum 得到 [0.615, -4.3, -2.3, ...]。
+        # 這會讓 docs/HANDOFF.md §6 的過門軌跡（走預設 random）與
+        # docs/SIM_VISUAL_FIDELITY.md §6 的偵測基準（DRUM_STYLE=drum）
+        # 明明都寫 seed=42，卻不是同一個場地。
+        if style == 'random':
+            style_rng = random.Random()
+            style_rng.seed(int(seed_text) if seed_text else None)
+            self.drum_style = style_rng.choice(DRUM_STYLES)
+        else:
+            self.drum_style = style
+        self._spawned: dict[str, str] = {}
 
         self.models_path = os.path.join(get_package_share_directory('bringup'), 'models')
         self.pool_floor_z = POOL_FLOOR_Z
@@ -124,6 +139,7 @@ class EntitySpawner(Node):
         if future.result() is None or not future.result().success:
             raise RuntimeError(f'Failed to spawn {entity_name}: {future.result()}')
 
+        self._spawned[entity_name] = model_name
         self.get_logger().info(
             f'Spawned {entity_name} from {model_name} at x={x:.2f}, y={y:.2f}, z={z:.2f}, yaw={yaw:.2f}'
         )
@@ -228,6 +244,27 @@ class EntitySpawner(Node):
             self.spawn_qualification()
         else:
             self.spawn_finals()
+        self.write_manifest()
+
+    def write_manifest(self) -> None:
+        """記下每個實體實際是用哪個模型生成的。
+
+        實體名稱刻意與外形無關（tub 也叫 blue_drum），所以偵測器與下游工具
+        不必在意生成的是哪個變體。但資料集產生器需要知道 —— 圓桶與方形箱的
+        尺寸差很多（0.60x0.60 vs 0.66x0.44），套錯會產生系統性偏掉的標註框，
+        而且因為實體名稱一模一樣，沒有任何地方會發現。
+
+        用檔案而不是 latched topic：這個節點生成完就結束，transient_local
+        的發布者會跟著消失，晚一步啟動的訂閱者收不到。
+        """
+        path = os.environ.get('ORCA_ARENA_MANIFEST', '/tmp/orca_arena_manifest.json')
+        payload = {'arena': self.arena, 'drum_style': self.drum_style, 'entities': self._spawned}
+        try:
+            with open(path, 'w', encoding='utf-8') as file:
+                json.dump(payload, file, indent=2, sort_keys=True)
+            self.get_logger().info(f'Wrote arena manifest to {path}')
+        except OSError as exc:
+            self.get_logger().warning(f'Could not write arena manifest to {path}: {exc}')
 
 
 def main(args=None):
