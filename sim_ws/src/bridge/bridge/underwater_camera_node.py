@@ -35,6 +35,7 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import HistoryPolicy, QoSProfile, ReliabilityPolicy, qos_profile_sensor_data
+from rcl_interfaces.msg import SetParametersResult
 from sensor_msgs.msg import Image
 
 # Attenuation coefficients (1/m) and veiling light for clear chlorinated pool
@@ -213,6 +214,7 @@ class UnderwaterCamera(Node):
                          'vignette_strength')
         })
         self.water.seed(self.get_parameter('randomize_seed').value)
+        self.add_on_set_parameters_callback(self._on_parameters_set)
 
         self._lock = threading.Lock()
         self._depth = None
@@ -251,6 +253,17 @@ class UnderwaterCamera(Node):
             f'Underwater camera: {self.get_parameter("input_image_topic").value} '
             f'-> {self.get_parameter("output_image_topic").value}  '
             f'beta={np.round(self.water.beta, 3).tolist()}')
+    def _on_parameters_set(self, params):
+        updates = {}
+        for param in params:
+            if param.name in ('beta', 'veiling_colour', 'veiling_gain', 'max_range_m',
+                              'blur_range_m', 'blur_max_sigma_px', 'awb_strength',
+                              'exposure_target', 'exposure_strength', 'noise_sigma',
+                              'vignette_strength'):
+                updates[param.name] = param.value
+        if updates:
+            self.water.update(**updates)
+        return SetParametersResult(successful=True)
 
     def _roll_water(self) -> None:
         self.water.randomize(self.get_parameter('beta_range').value,
