@@ -156,8 +156,13 @@ class EntitySpawner(Node):
         for index, start_y in enumerate(start_line_ys, start=1):
             self.spawn_model('qualification_start_line', f'qualification_start_line_{index}',
                              start_line_x, start_y, 0.02, yaw=math.pi / 2.0)
-            # The gate highest point will be 5cm below the surface (origin at z = -0.08)
-            self.spawn_model('q_gate', f'q_gate_{index}', gate_x, start_y, -0.08, yaw=math.pi / 2.0)
+            # Crossbar aligned with the waterline. The model origin sits at the
+            # centre of the 6 cm-thick top bar, so z = 0.0 straddles the bar
+            # across the surface (-0.03 to +0.03) instead of sinking it 5 cm
+            # under. This is the hard case for gate detection on purpose: the
+            # bar now sits exactly where surface glare and the waterline destroy
+            # it, which is the failure mode the post-pair trees exist for.
+            self.spawn_model('q_gate', f'q_gate_{index}', gate_x, start_y, 0.0, yaw=math.pi / 2.0)
 
         chosen_start_y = self.rng.choice(start_line_ys)
         self.spawn_vehicle(
